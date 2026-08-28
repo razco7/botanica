@@ -1,0 +1,92 @@
+---
+import { footer, contact, site } from '../data/site';
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <img src="/images/site/logo-footer.png" alt={site.name} width="90" height="90" />
+      <p>{site.name} — {site.tagline}</p>
+      <div class="site-footer__social">
+        <a href={contact.instagram} target="_blank" rel="noopener" aria-label="אינסטגרם">אינסטגרם</a>
+        <a href={contact.facebook} target="_blank" rel="noopener" aria-label="פייסבוק">פייסבוק</a>
+      </div>
+    </div>
+
+    <nav aria-label="מפת האתר">
+      <h2>ניווט</h2>
+      <ul>
+        {footer.siteLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <nav aria-label="קטגוריות בחנות">
+      <h2>החנות</h2>
+      <ul>
+        {footer.shopLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <nav aria-label="עזרה">
+      <h2>עזרה</h2>
+      <ul>
+        {footer.helpLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="site-footer__contact">
+      <h2>יצירת קשר</h2>
+      <p>
+        <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a><br />
+        <a href={contact.mapsUrl} target="_blank" rel="noopener">{contact.address}</a><br />
+        {contact.hours}
+      </p>
+    </div>
+  </div>
+
+  <div class="container site-footer__legal">
+    כל הזכויות שמורות ל{site.name} — {site.tagline} {site.year}©
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--dark);
+    color: #d7d7d7;
+    padding-block: clamp(3rem, 7vw, 4.5rem) 1.5rem;
+    font-size: 0.98rem;
+  }
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: 1.4fr repeat(4, 1fr);
+    gap: 2rem;
+  }
+  .site-footer h2 {
+    color: #fff;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1em;
+  }
+  .site-footer ul { list-style: none; margin: 0; padding: 0; }
+  .site-footer li + li { margin-top: 0.55em; }
+  .site-footer a:hover { color: #fff; }
+  .site-footer__brand img { margin-bottom: 0.8rem; filter: brightness(0) invert(1); opacity: 0.9; }
+  .site-footer__social { display: flex; gap: 1rem; margin-top: 0.8rem; }
+  .site-footer__legal {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    font-size: 0.85rem;
+    color: #9a9a9a;
+    text-align: center;
+  }
+
+  @media (max-width: 860px) {
+    .site-footer__grid { grid-template-columns: 1fr 1fr; }
+    .site-footer__brand { grid-column: 1 / -1; }
+  }
+  @media (max-width: 520px) {
+    .site-footer__grid { grid-template-columns: 1fr; }
+  }
+</style>

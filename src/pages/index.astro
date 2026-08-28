@@ -1,0 +1,121 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ProductCard from '../components/ProductCard.astro';
+import WorkshopCard from '../components/WorkshopCard.astro';
+import { promo } from '../data/site';
+
+const products = await getCollection('products');
+const latest = products
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+const workshops = (await getCollection('workshops')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Base
+  title="בוטניקה | טיפול בצמחי מרפא, פרחי באך וארומתרפיה"
+  bareTitle
+  description="קליניקה וחנות אינטרנטית לרפואה משלימה בחדרה. טיפול בפרחי באך, ארומתרפיה, צמחי מרפא, סדנאות, מגדיר צמחים."
+>
+  {promo.enabled && (
+    <section class="promo" style={`background-image: linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,.42)), url(${promo.image})`}>
+      <div class="container promo__inner">
+        <p class="promo__title">{promo.title}</p>
+        <p class="promo__subtitle">{promo.subtitle}</p>
+        <a href={promo.ctaHref} class="btn btn--light">{promo.ctaLabel}</a>
+      </div>
+    </section>
+  )}
+
+  <section class="hero" style="background-image: linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)), url(/images/site/hero-botanic.jpg)">
+    <div class="container hero__inner">
+      <h1>ברוכים הבאים לבוטניקה</h1>
+      <p>
+        כאן באתר אני משלבת את כל האהבות שלי: טיפול טבעי, אהבת צמחים, יצירה ועיצוב.
+        תוכלו לקבוע תור לייעוץ ולטיפול בקליניקה שלי, ולמצוא מגוון מוצרים שאני מכינה
+        בעצמי — שמנים טיפוליים, פורמולות פרחי באך, בשמים טבעיים, וכן סדנאות שאני
+        מארחת וכלי קרמיקה שאני מייצרת בסדנה.
+      </p>
+      <div class="hero__actions">
+        <a href="/contact" class="btn btn--light">לחצו לקביעת תור</a>
+        <a href="/the-clinic" class="hero__link">לקריאה על הקליניקה ושיטות הטיפול ←</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>מוצרים אחרונים שנוספו</h2>
+      </div>
+      <div class="grid-3">
+        {latest.map((product) => <ProductCard product={product} />)}
+      </div>
+      <p class="text-center" style="margin-top: 2.5rem">
+        <a href="/store" class="btn">לכל המוצרים בחנות</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--sand">
+    <div class="container">
+      <div class="section-head">
+        <h2>סדנאות טיפוליות</h2>
+        <p>חוויה יצירתית עם נגיעה טיפולית — בקבוצות קטנות.</p>
+      </div>
+      <div class="workshops-list">
+        {workshops.map((workshop) => <WorkshopCard workshop={workshop} />)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .promo, .hero {
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+  }
+  .promo__inner {
+    text-align: center;
+    padding-block: clamp(2.5rem, 6vw, 4rem);
+  }
+  .promo__title { font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 700; margin-bottom: 0.2em; }
+  .promo__subtitle { font-size: 1.1rem; margin-bottom: 1.4rem; }
+
+  .hero__inner {
+    max-width: 760px;
+    text-align: center;
+    margin-inline: auto;
+    padding-block: clamp(4rem, 12vw, 8rem);
+  }
+  .hero h1 { color: #fff; margin-bottom: 0.5em; }
+  .hero p { font-size: clamp(1.05rem, 2.6vw, 1.3rem); }
+  .hero__actions {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .hero__link { color: #fff; border-bottom: 1px solid rgba(255,255,255,.6); padding-bottom: 2px; }
+  .hero__link:hover { color: #fff; border-color: #fff; }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1.2rem, 3vw, 2.4rem);
+  }
+  .workshops-list { display: grid; gap: clamp(2.5rem, 6vw, 4.5rem); }
+
+  @media (max-width: 820px) {
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .grid-3 { grid-template-columns: 1fr; }
+  }
+</style>

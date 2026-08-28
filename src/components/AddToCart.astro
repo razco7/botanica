@@ -1,0 +1,76 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { snipcart } from '../data/site';
+import { formatPrice } from '../lib/format';
+
+interface Props {
+  product: CollectionEntry<'products'>;
+}
+const { product } = Astro.props;
+const d = product.data;
+const url = `/product/${product.id}`;
+const enabled = Boolean(snipcart.apiKey);
+const hasVariant = d.variantName && d.variantOptions && d.variantOptions.length > 0;
+---
+
+{enabled ? (
+  <>
+  <div class="add-to-cart">
+    {hasVariant && (
+      <label class="add-to-cart__variant">
+        <span>{d.variantName}</span>
+        <select id={`variant-${product.id}`}>
+          {d.variantOptions!.map((opt) => <option value={opt}>{opt}</option>)}
+        </select>
+      </label>
+    )}
+
+    <button
+      class="btn btn--block snipcart-add-item"
+      disabled={!d.inStock}
+      data-item-id={product.id}
+      data-item-name={d.name}
+      data-item-price={d.price}
+      data-item-url={url}
+      data-item-image={d.image}
+      data-item-description={d.summary}
+      data-item-categories={d.category}
+      data-item-min-quantity="1"
+      data-item-custom1-name={hasVariant ? d.variantName : undefined}
+      data-item-custom1-options={hasVariant ? d.variantOptions!.join('|') : undefined}
+      data-item-custom1-required={hasVariant ? 'true' : undefined}
+    >
+      {d.inStock ? 'הוספה לעגלה' : 'אזל מהמלאי'}
+    </button>
+  </div>
+
+  {hasVariant && (
+    <script is:inline define:vars={{ slug: product.id }}>
+      // keep the visible <select> in sync with the Snipcart custom field
+      const sel = document.getElementById(`variant-${slug}`);
+      const btn = document.querySelector(`.snipcart-add-item[data-item-id="${slug}"]`);
+      const sync = () => btn && btn.setAttribute('data-item-custom1-value', sel.value);
+      if (sel && btn) { sync(); sel.addEventListener('change', sync); }
+    </script>
+  )}
+  </>
+) : (
+  <>
+  <a href="/contact" class="btn btn--block">לפרטים והזמנה — צרו קשר</a>
+  <p class="add-to-cart__note">התשלום המקוון יופעל בקרוב.</p>
+  </>
+)}
+
+<style>
+  .add-to-cart { display: grid; gap: 0.9rem; }
+  .add-to-cart__variant { display: grid; gap: 0.35rem; font-size: 0.95rem; }
+  .add-to-cart__variant select {
+    font: inherit;
+    padding: 0.7em 0.9em;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: #fff;
+  }
+  .add-to-cart__note { font-size: 0.85rem; color: var(--ink-faint); margin-top: 0.6rem; }
+  .btn[disabled] { opacity: 0.5; pointer-events: none; }
+</style>

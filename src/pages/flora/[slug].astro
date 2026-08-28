@@ -1,0 +1,149 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const plants = await getCollection('flora');
+  return plants.map((plant) => ({ params: { slug: plant.id }, props: { plant } }));
+}
+
+const { plant } = Astro.props;
+const d = plant.data;
+const { Content } = await render(plant);
+
+const related = (
+  await Promise.all(
+    d.similarPlants.map((slug) => getEntry('flora', slug).catch(() => undefined)),
+  )
+).filter((p): p is NonNullable<typeof p> => Boolean(p));
+
+const facts = [
+  ['חודשי פריחה', d.bloomMonths],
+  ['איזור צמיחה טבעי', d.region],
+  ['סוג', d.plantType],
+  ['חלקי הצמח בשימוש', d.partsUsed],
+  ['טעם', d.taste],
+].filter(([, v]) => v);
+---
+
+<Base
+  title={`${d.name} — ${d.latinName}`}
+  description={d.identification.slice(0, 155)}
+  image={d.image}
+>
+  <article class="section flora">
+    <div class="container">
+      <nav class="crumbs"><a href="/flora-index">מגדיר צמחים</a> / {d.name}</nav>
+
+      <header class="flora__head">
+        <div class="flora__photo">
+          <img src={d.image} alt={d.name} width="900" height="700" />
+        </div>
+        <div>
+          <h1>{d.name}</h1>
+          <p class="flora__latin">{d.latinName}</p>
+        </div>
+      </header>
+
+      <div class="flora__grid">
+        <div class="prose flora__main">
+          <h2>מאפייני זיהוי</h2>
+          <p>{d.identification}</p>
+
+          <h2>פעילות</h2>
+          <p>{d.activity}</p>
+
+          {d.internalUse.length > 0 && (
+            <>
+              <h2>יעיל בשימוש פנימי</h2>
+              {d.internalUseNote && <p><em>{d.internalUseNote}</em></p>}
+              <ul>{d.internalUse.map((x) => <li>{x}</li>)}</ul>
+            </>
+          )}
+
+          {d.externalUse.length > 0 && (
+            <>
+              <h2>יעיל בשימוש חיצוני</h2>
+              {d.externalUseNote && <p><em>{d.externalUseNote}</em></p>}
+              <ul>{d.externalUse.map((x) => <li>{x}</li>)}</ul>
+            </>
+          )}
+
+          {d.sideEffects && (
+            <>
+              <h2>{d.sideEffectsLabel}</h2>
+              <p>{d.sideEffects}</p>
+            </>
+          )}
+
+          <Content />
+        </div>
+
+        <aside class="flora__aside">
+          {facts.length > 0 && (
+            <dl class="facts">
+              {facts.map(([k, v]) => (
+                <div><dt>{k}</dt><dd>{v}</dd></div>
+              ))}
+            </dl>
+          )}
+
+          {d.tip && (
+            <div class="tip">
+              <p class="tip__label">מהקליניקה</p>
+              <p>{d.tip}</p>
+            </div>
+          )}
+
+          {related.length > 0 && (
+            <div class="related">
+              <p class="related__label">צמחים בעלי תכונות דומות</p>
+              <ul>
+                {related.map((p) => (
+                  <li><a href={`/flora/${p.id}`}>{p.data.name}</a></li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </aside>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .crumbs { color: var(--ink-faint); font-size: 0.9rem; margin-bottom: 1.5rem; }
+  .flora__head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+  .flora__photo { border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-soft); }
+  .flora__photo img { width: 100%; aspect-ratio: 5 / 4; object-fit: cover; }
+  .flora__latin { color: var(--ink-faint); font-style: italic; direction: ltr; text-align: start; font-size: 1.1rem; }
+
+  .flora__grid { display: grid; grid-template-columns: 1.6fr 0.9fr; gap: clamp(2rem, 5vw, 3.5rem); align-items: start; }
+
+  .facts { display: grid; gap: 0; margin: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .facts > div { display: grid; grid-template-columns: 1fr 1fr; padding: 0.8rem 1rem; }
+  .facts > div + div { border-top: 1px solid var(--line); }
+  .facts dt { color: var(--ink-soft); font-size: 0.9rem; margin: 0; }
+  .facts dd { margin: 0; font-weight: 700; font-size: 0.95rem; }
+
+  .tip { margin-top: 1.5rem; background: var(--bg-sand); border-radius: var(--radius); padding: 1.2rem 1.3rem; }
+  .tip__label { text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.75rem; color: var(--accent); margin-bottom: 0.5em; }
+  .tip p:last-child { margin: 0; }
+
+  .related { margin-top: 1.5rem; }
+  .related__label { font-weight: 700; margin-bottom: 0.6em; }
+  .related ul { list-style: none; margin: 0; padding: 0; }
+  .related li + li { margin-top: 0.4em; }
+  .related a { color: var(--accent); }
+
+  @media (max-width: 820px) {
+    .flora__head { grid-template-columns: 1fr; }
+    .flora__grid { grid-template-columns: 1fr; }
+  }
+</style>

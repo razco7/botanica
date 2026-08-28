@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PlantCard from '../components/PlantCard.astro';
+
+const plants = (await getCollection('flora')).sort((a, b) =>
+  a.data.name.localeCompare(b.data.name, 'he'),
+);
+---
+
+<Base
+  title="מגדיר צמחי מרפא"
+  description="מגדיר צמחי המרפא של בוטניקה — מאפייני זיהוי, פעילות, שימוש פנימי וחיצוני, ותופעות לוואי. לבנדר, אשווגנדה, תלתן ועוד."
+>
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h1>מגדיר צמחים</h1>
+        <p>לחצו על צמח כדי לקרוא על מאפייני הזיהוי, הפעילות ודרכי השימוש שלו.</p>
+      </div>
+      <div class="flora-grid">
+        {plants.map((plant) => <PlantCard plant={plant} />)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .flora-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+  @media (max-width: 780px) { .flora-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .flora-grid { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,142 @@
+/* ==========================================================================
+   Botanica — global styles
+   RTL Hebrew site. Recreated from the original Webflow design.
+   Type + colour tokens sampled from the live site (Alef, #1a1b1f on #fff,
+   rose accent #db4b68).
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap');
+
+:root {
+  /* colour */
+  --bg: #ffffff;
+  --bg-soft: #f4f4f4;
+  --bg-sand: #f2efe9;
+  --ink: #1a1b1f;
+  --ink-soft: #585858;
+  --ink-faint: #8a8a8a;
+  --line: #e6e6e6;
+  --accent: #db4b68;
+  --accent-ink: #ffffff;
+  --dark: #1a1b1f;
+
+  /* type */
+  --font: 'Alef', 'Assistant', 'Rubik', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --fs-body: 1.125rem;   /* 18px base, live site paragraphs run 22px on desktop */
+  --lh-body: 1.6;
+
+  /* layout */
+  --maxw: 1180px;
+  --gutter: clamp(1.1rem, 4vw, 2.5rem);
+  --section-y: clamp(3.5rem, 8vw, 6.5rem);
+  --radius: 10px;
+  --radius-lg: 16px;
+  --shadow: 0 12px 40px -18px rgba(26, 27, 31, 0.28);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  direction: rtl;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--accent); }
+
+h1, h2, h3, h4 {
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 0.5em;
+  color: var(--ink);
+}
+h1 { font-size: clamp(2.1rem, 6vw, 3.4rem); }
+h2 { font-size: clamp(1.7rem, 4vw, 2.5rem); }
+h3 { font-size: clamp(1.3rem, 3vw, 1.7rem); }
+
+p { margin: 0 0 1.1em; }
+p:last-child { margin-bottom: 0; }
+
+/* ---- layout helpers ---- */
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.section { padding-block: var(--section-y); }
+.section--soft { background: var(--bg-soft); }
+.section--sand { background: var(--bg-sand); }
+
+.section-head { text-align: center; margin-bottom: clamp(2rem, 5vw, 3.25rem); }
+.section-head h2 { margin-bottom: 0.35em; }
+.section-head p { color: var(--ink-soft); max-width: 46ch; margin-inline: auto; }
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.8rem;
+  color: var(--accent);
+  margin-bottom: 0.9em;
+}
+
+/* ---- buttons ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  padding: 0.95em 2.1em;
+  font: inherit;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  border: 1px solid var(--dark);
+  border-radius: 999px;
+  background: var(--dark);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+.btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-1px); }
+.btn--ghost { background: transparent; color: var(--ink); }
+.btn--ghost:hover { color: #fff; }
+.btn--light { background: #fff; border-color: #fff; color: var(--ink); }
+.btn--light:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn--block { width: 100%; }
+
+/* ---- prose (long-form copy: clinic, product body, flora) ---- */
+.prose { font-size: clamp(1rem, 2.4vw, 1.22rem); line-height: 1.75; color: var(--ink); }
+.prose > * + * { margin-top: 1.1em; }
+.prose h2 { margin-top: 1.6em; font-size: clamp(1.4rem, 3.2vw, 1.9rem); }
+.prose h3 { margin-top: 1.4em; }
+.prose ul, .prose ol { padding-inline-start: 1.3em; margin: 0.6em 0; }
+.prose li + li { margin-top: 0.35em; }
+.prose strong { font-weight: 700; }
+
+/* ---- utilities ---- */
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.text-center { text-align: center; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

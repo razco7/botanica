@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import WorkshopCard from '../components/WorkshopCard.astro';
+
+const workshops = (await getCollection('workshops')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Base
+  title="סדנאות — הכנת בשמים וקרמיקה"
+  description="סדנאות ייחודיות בבוטניקה: הכנת בשמים משמנים אתריים וסדנת קרמיקה ליצירת גאדג'טים למטבח. חוויה יצירתית עם נגיעה טיפולית."
+>
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h1>סדנאות ומפגשים</h1>
+        <p>חוויה יצירתית עם נגיעה טיפולית, בקבוצות קטנות. להרשמה ולתיאום מועד — פנו דרך טופס יצירת הקשר.</p>
+      </div>
+      <div class="workshops-list">
+        {workshops.map((workshop) => (
+          <WorkshopCard workshop={workshop} headingLevel="h2" />
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .workshops-list { display: grid; gap: clamp(2.5rem, 7vw, 5rem); }
+</style>

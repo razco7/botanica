@@ -1,0 +1,95 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { categories } from '../../data/site';
+
+const products = (await getCollection('products')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Base
+  title="חנות בוטניקה — שמנים, פרחי באך וקרמיקה"
+  description="חנות בוטניקה: שמנים ארומתרפיים טיפוליים, תמציות פרחי באך וכלי קרמיקה בעבודת יד — בהתאמה אישית."
+>
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><h1>המוצרים שלנו</h1></div>
+
+      <div class="store-filter" role="tablist" aria-label="סינון לפי קטגוריה">
+        <button class="chip is-active" data-filter="all" aria-pressed="true">כל המוצרים</button>
+        {categories.map((c) => (
+          <button class="chip" data-filter={c.slug} aria-pressed="false">{c.label}</button>
+        ))}
+      </div>
+
+      <div class="store-grid" id="store-grid">
+        {products.map((product) => (
+          <div class="store-grid__item" data-category={product.data.category}>
+            <ProductCard product={product} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .store-filter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+  .chip {
+    font: inherit;
+    font-size: 0.95rem;
+    padding: 0.5em 1.2em;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .chip:hover { border-color: var(--ink); }
+  .chip.is-active { background: var(--dark); color: #fff; border-color: var(--dark); }
+
+  .store-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(1.2rem, 3vw, 2.2rem);
+  }
+  .store-grid__item[hidden] { display: none; }
+
+  @media (max-width: 960px) { .store-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 700px) { .store-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 420px) { .store-grid { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>('.store-filter .chip');
+  const items = document.querySelectorAll<HTMLElement>('.store-grid__item');
+
+  function apply(filter: string) {
+    items.forEach((el) => {
+      el.hidden = filter !== 'all' && el.dataset.category !== filter;
+    });
+    chips.forEach((c) => {
+      const active = c.dataset.filter === filter;
+      c.classList.toggle('is-active', active);
+      c.setAttribute('aria-pressed', String(active));
+    });
+    const url = new URL(location.href);
+    if (filter === 'all') url.searchParams.delete('c');
+    else url.searchParams.set('c', filter);
+    history.replaceState(null, '', url);
+  }
+
+  chips.forEach((c) => c.addEventListener('click', () => apply(c.dataset.filter!)));
+
+  const initial = new URL(location.href).searchParams.get('c');
+  if (initial) apply(initial);
+</script>

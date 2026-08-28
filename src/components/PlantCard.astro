@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  plant: CollectionEntry<'flora'>;
+}
+const { plant } = Astro.props;
+const { name, latinName, image } = plant.data;
+const href = `/flora/${plant.id}`;
+---
+
+<a href={href} class="plant-card">
+  <span class="plant-card__media">
+    <img src={image} alt={name} loading="lazy" width="700" height="600" />
+  </span>
+  <span class="plant-card__name">{name}</span>
+  <span class="plant-card__latin">{latinName}</span>
+</a>
+
+<style>
+  .plant-card {
+    display: block;
+    text-align: center;
+  }
+  .plant-card__media {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--bg-soft);
+    margin-bottom: 0.9rem;
+  }
+  .plant-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .plant-card:hover .plant-card__media img { transform: scale(1.04); }
+  .plant-card__name { display: block; font-weight: 700; font-size: 1.2rem; }
+  .plant-card__latin { display: block; color: var(--ink-faint); font-style: italic; font-size: 0.95rem; direction: ltr; }
+</style>

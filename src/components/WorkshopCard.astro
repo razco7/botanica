@@ -1,0 +1,50 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+
+interface Props {
+  workshop: CollectionEntry<'workshops'>;
+  headingLevel?: 'h2' | 'h3';
+}
+const { workshop, headingLevel = 'h3' } = Astro.props;
+const { title, image, signupReason } = workshop.data;
+const { Content } = await render(workshop);
+const Heading = headingLevel;
+const signupHref = `/contact?reason=${encodeURIComponent(signupReason)}`;
+---
+
+<article class="workshop-card">
+  <div class="workshop-card__media">
+    <img src={image} alt={title} loading="lazy" width="900" height="640" />
+  </div>
+  <div class="workshop-card__body">
+    <Heading class="workshop-card__title">{title}</Heading>
+    <div class="prose workshop-card__text">
+      <slot><Content /></slot>
+    </div>
+    <a href={signupHref} class="btn btn--ghost">להרשמה לסדנה</a>
+  </div>
+</article>
+
+<style>
+  .workshop-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+  }
+  .workshop-card:nth-child(even) { direction: ltr; }
+  .workshop-card:nth-child(even) > * { direction: rtl; }
+  .workshop-card__media {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--bg-soft);
+  }
+  .workshop-card__media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+  .workshop-card__title { margin-bottom: 0.5em; }
+  .workshop-card__text { margin-bottom: 1.6rem; }
+
+  @media (max-width: 780px) {
+    .workshop-card { grid-template-columns: 1fr; }
+    .workshop-card:nth-child(even) { direction: rtl; }
+  }
+</style>

@@ -1,0 +1,68 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { categories, categoryLabel } from '../../data/site';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products');
+  return categories.map((c) => ({
+    params: { category: c.slug },
+    props: {
+      label: c.label,
+      items: products
+        .filter((p) => p.data.category === c.slug)
+        .sort((a, b) => a.data.order - b.data.order),
+    },
+  }));
+}
+
+const { category } = Astro.params;
+const { label, items } = Astro.props;
+---
+
+<Base
+  title={`${label} — חנות בוטניקה`}
+  description={`${label} של בוטניקה — בעבודת יד ובהתאמה אישית.`}
+>
+  <section class="section">
+    <div class="container">
+      <nav class="crumbs"><a href="/store">החנות</a> / {label}</nav>
+      <div class="section-head"><h1>{label}</h1></div>
+
+      <div class="cat-tabs">
+        <a href="/store">כל המוצרים</a>
+        {categories.map((c) => (
+          <a href={`/store/${c.slug}`} aria-current={c.slug === category ? 'page' : undefined}>
+            {c.label}
+          </a>
+        ))}
+      </div>
+
+      <div class="store-grid">
+        {items.map((product) => <ProductCard product={product} />)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .crumbs { color: var(--ink-faint); font-size: 0.9rem; margin-bottom: 1rem; }
+  .cat-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem 1.2rem;
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+  .cat-tabs a { padding-block: 0.3em; border-bottom: 2px solid transparent; }
+  .cat-tabs a[aria-current='page'] { color: var(--accent); border-color: var(--accent); }
+  .store-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(1.2rem, 3vw, 2.2rem);
+  }
+  @media (max-width: 960px) { .store-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 700px) { .store-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 420px) { .store-grid { grid-template-columns: 1fr; } }
+</style>
