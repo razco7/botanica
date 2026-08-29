@@ -58,7 +58,6 @@ export const footer = {
   columns: {
     site: 'מפת האתר',
     shop: 'מוצרים בחנות',
-    help: 'עזרה',
     follow: 'עיקבו אחרינו',
   },
   siteLinks: [
@@ -72,11 +71,6 @@ export const footer = {
     { label: 'פרחי באך', href: '/store/bach' },
     { label: 'קרמיקה', href: '/store/ceramic' },
     { label: 'שמנים', href: '/store/oils' },
-  ],
-  helpLinks: [
-    { label: 'משלוח', href: '/contact' },
-    { label: 'החזרות והחלפות', href: '/contact' },
-    { label: 'שמירה על חיי המוצר', href: '/contact' },
   ],
 };
 

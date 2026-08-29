@@ -26,11 +26,6 @@ const follow = [
         {footer.shopLinks.map((l) => <a class="footer-link" href={l.href}>{l.label}</a>)}
       </nav>
 
-      <nav class="footer-col" aria-label={footer.columns.help}>
-        <p class="footer-col__label">{footer.columns.help}</p>
-        {footer.helpLinks.map((l) => <a class="footer-link" href={l.href}>{l.label}</a>)}
-      </nav>
-
       <nav class="footer-col" aria-label={footer.columns.follow}>
         <p class="footer-col__label">{footer.columns.follow}</p>
         {follow.map((l) => (
@@ -52,7 +47,7 @@ const follow = [
   /* .footer — 5 evenly spread columns (copyright + 4 link columns) */
   .footer-grid {
     display: grid;
-    grid-template-columns: 1.4fr repeat(4, 1fr);
+    grid-template-columns: 1.6fr repeat(3, 1fr);
     gap: 20px;
     justify-content: space-between;
     align-items: start;
