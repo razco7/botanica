@@ -1,5 +1,6 @@
 ---
 name: אַשְׁוַוגַנְדָה – וִיתַנְיָה מְשַׁכֶּרֶת
+shortName: אשווגנדה
 latinName: Withania somnifera
 image: /images/flora/ashwagandha.jpg
 identification: >-

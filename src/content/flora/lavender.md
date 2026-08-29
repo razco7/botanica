@@ -1,5 +1,6 @@
 ---
 name: לָבֶנְדֵּר – אֲזוֹבְיוֹן רְפוּאִי
+shortName: לבנדר
 latinName: Lavandula angustifolia
 image: /images/flora/lavender.jpg
 identification: >-

@@ -21,7 +21,8 @@ const products = defineCollection({
 const flora = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/flora' }),
   schema: z.object({
-    name: z.string(),
+    name: z.string(), // full (vocalised) name shown on the detail page
+    shortName: z.string().optional(), // plain name shown on the index card
     latinName: z.string(),
     image: z.string(),
     identification: z.string(),

@@ -21,12 +21,13 @@ const plants = (await getCollection('flora')).sort((a, b) =>
 </Base>
 
 <style>
-  /* .grid-magdir — 3 across (bump to repeat(4, 1fr) when more entries are added) */
+  /* .main-collection-list — auto-fit columns, min 20rem */
   .flora-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     gap: 32px;
   }
-  @media (max-width: 991px) { .flora-grid { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 479px) { .flora-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 767px) {
+    .flora-grid { grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 24px; }
+  }
 </style>

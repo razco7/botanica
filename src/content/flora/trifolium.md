@@ -1,5 +1,6 @@
 ---
 name: טְרִיפוֹלְיוּם – תִּלְתָּן אָדֹם
+shortName: טריפוליום
 latinName: Trifolium pratense
 image: /images/flora/trifolium.jpg
 identification: >-
