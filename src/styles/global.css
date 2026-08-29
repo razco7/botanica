@@ -113,7 +113,6 @@ p:last-child { margin-bottom: 0; }
 .dim { opacity: var(--dim); }
 .eyebrow {
   text-transform: uppercase;
-  letter-spacing: .12em;
   font-size: 14px;
   opacity: var(--dim);
   margin-bottom: 1em;
@@ -154,7 +153,6 @@ p:last-child { margin-bottom: 0; }
   justify-content: center;
   color: #fff;
   text-align: center;
-  letter-spacing: 2px;
   text-transform: uppercase;
   background-color: var(--ink);
   border: 0;
