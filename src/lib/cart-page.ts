@@ -186,7 +186,8 @@ function init(el: HTMLElement) {
             const t = totals(ls);
             emailOrder(details, ls, t).catch(() => {});
             clearCart();
-            location.href = `/order-confirmation?id=${encodeURIComponent(
+            const ref = shortRef(details.id || '');
+            location.href = `/order-confirmation?n=${ref}&id=${encodeURIComponent(
               details.id || '',
             )}`;
           }),
@@ -214,39 +215,55 @@ function init(el: HTMLElement) {
       ? `${details.payer.name.given_name ?? ''} ${details.payer.name.surname ?? ''}`.trim()
       : '';
     const buyerEmail = details?.payer?.email_address || '';
-    const items = ls
-      .map(
-        (l) =>
-          `• ${l.p.name}${l.variant ? ` (${l.variant})` : ''} — ${l.qty} × ${money(
-            l.p.price,
-          )} = ${money(l.p.price * l.qty)}`,
-      )
-      .join('\n');
+    const ref = shortRef(details.id || '');
     const fulfilment =
       cfg.fulfilment === 'pickup'
         ? 'איסוף עצמי מהקליניקה בחדרה'
         : `משלוח (${money(t.ship)})`;
+
+    // Web3Forms mangles non-ASCII field *names*, so everything goes in one
+    // `message` field — the body itself is Hebrew.
+    const message = [
+      `מספר הזמנה: ${ref}`,
+      `שם הלקוח: ${buyer || '—'}`,
+      `אימייל הלקוח: ${buyerEmail || '—'}`,
+      '',
+      'פריטים:',
+      ...ls.map(
+        (l) =>
+          `• ${l.p.name}${l.variant ? ` (${l.variant})` : ''} — ${l.qty} × ${money(
+            l.p.price,
+          )} = ${money(l.p.price * l.qty)}`,
+      ),
+      '',
+      `סה״כ לתשלום: ${money(t.total)}`,
+      `אופן מסירה: ${fulfilment}`,
+      '',
+      `אסמכתת PayPal: ${details.id || '—'}`,
+    ].join('\n');
 
     await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({
         access_key: cfg.orderEmailKey,
-        subject: `הזמנה חדשה מהאתר — ${money(t.total)}`,
+        subject: `הזמנה חדשה ${ref} — ${money(t.total)}`,
         from_name: 'חנות בוטניקה',
-        // `email` drives the reply-to, so a reply reaches the customer
+        name: buyer || 'לקוח/ה',
         email: buyerEmail || 'noreply@botanicanature.com',
-        // Hebrew keys => Hebrew section labels in the notification email
-        'שם הלקוח': buyer || '—',
-        'אימייל הלקוח': buyerEmail || '—',
-        'מספר הזמנה בּ־PayPal': details.id || '—',
-        'פריטים': items,
-        'סה״כ לתשלום': `${money(t.total)} · ${fulfilment}`,
+        message,
       }),
     });
   }
 
   subscribe(render);
+}
+
+/** Short, phone-friendly order number derived deterministically from the PayPal id. */
+function shortRef(id: string): string {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (Math.imul(31, h) + id.charCodeAt(i)) | 0;
+  return String((Math.abs(h) % 900000) + 100000); // 6 digits, 100000–999999
 }
 
 function whenPayPalReady(cb: () => void) {

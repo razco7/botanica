@@ -29,7 +29,7 @@ const mapEmbed = `https://www.google.com/maps?q=${encodeURIComponent(contact.add
       <div class="contact-form__row">
         <label class="field">
           <span class="field__label">שם</span>
-          <input type="text" name="שם" required autocomplete="name" />
+          <input type="text" name="name" required autocomplete="name" />
         </label>
         <label class="field">
           <span class="field__label">דואר אלקטרוני</span>
@@ -37,13 +37,13 @@ const mapEmbed = `https://www.google.com/maps?q=${encodeURIComponent(contact.add
         </label>
         <label class="field">
           <span class="field__label">מספר טלפון</span>
-          <input type="tel" name="טלפון" autocomplete="tel" />
+          <input type="tel" name="phone" autocomplete="tel" />
         </label>
       </div>
 
       <label class="field">
         <span class="field__label">סיבת הפנייה</span>
-        <select name="סיבת הפנייה" id="contact-reason">
+        <select name="reason" id="contact-reason">
           <option value="" disabled selected>נא לבחור את סיבת הפנייה</option>
           {reasons.map((r) => <option value={r}>{r}</option>)}
         </select>
@@ -51,7 +51,7 @@ const mapEmbed = `https://www.google.com/maps?q=${encodeURIComponent(contact.add
 
       <label class="field">
         <span class="field__label">הודעה</span>
-        <textarea name="הודעה" rows="6" placeholder="הכניסו את פרטי ההודעה"></textarea>
+        <textarea name="message" rows="6" placeholder="הכניסו את פרטי ההודעה"></textarea>
       </label>
 
       <button type="submit" class="btn btn--block">שליחה</button>

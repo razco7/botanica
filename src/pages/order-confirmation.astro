@@ -6,16 +6,22 @@ import { contact } from '../data/site';
 <Base title="ההזמנה התקבלה" description="תודה על ההזמנה.">
   <section class="section container narrow text-center">
     <h1>תודה על ההזמנה! 🌿</h1>
+
+    <p class="order-ref" id="order-ref" hidden>
+      מספר הזמנה: <strong id="order-n"></strong>
+    </p>
+
     <p class="prose">
       התשלום התקבל ואישור תשלום נשלח אליכם במייל מ־PayPal.
       הקבלה תימסר לכם באיסוף.
-      <span id="order-id"></span>
     </p>
     <p class="prose">
       האיסוף הוא מהקליניקה בחדרה (אפיקי מים 1). <strong>יש לתאם איסוף מראש</strong> —
       התקשרו <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a>
       או כתבו ל־<a href={`mailto:${contact.email}`}>{contact.email}</a> עם מספר ההזמנה.
     </p>
+
+    <p class="order-id" id="order-id" hidden></p>
     <p style="margin-top: 2rem"><a href="/store" class="btn">חזרה לחנות</a></p>
   </section>
 </Base>
@@ -23,15 +29,28 @@ import { contact } from '../data/site';
 <style>
   .narrow { max-width: 620px; margin-inline: auto; }
   .narrow .prose a { text-decoration: underline; text-underline-offset: 3px; }
-  #order-id { display: block; margin-top: 0.5em; opacity: 0.6; font-size: 0.9em; }
+  .order-ref { font-size: 20px; margin: 0.5em 0 1.5em; }
+  .order-ref strong { font-size: 26px; letter-spacing: 0.06em; }
+  .order-id { opacity: 0.45; font-size: 13px; margin-top: 1.5em; }
 </style>
 
 <script>
   import { clearCart } from '../lib/cart';
   clearCart();
-  const id = new URLSearchParams(location.search).get('id');
+  const params = new URLSearchParams(location.search);
+  const n = params.get('n');
+  const id = params.get('id');
+  if (n) {
+    const wrap = document.getElementById('order-ref');
+    const el = document.getElementById('order-n');
+    if (el) el.textContent = n;
+    if (wrap) (wrap as HTMLElement).hidden = false;
+  }
   if (id) {
     const el = document.getElementById('order-id');
-    if (el) el.textContent = `מספר הזמנה: ${id}`;
+    if (el) {
+      el.textContent = `אסמכתת PayPal: ${id}`;
+      (el as HTMLElement).hidden = false;
+    }
   }
 </script>
