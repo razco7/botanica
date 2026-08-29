@@ -116,7 +116,9 @@ resolution). Clinic-page method images are 1024×526 on the live site; the hero 
 - Facebook: `https://www.facebook.com/profile.php?id=61585424797847`
 - Contact email: `hello@botanicanature.com`
 - Checkout: PayPal JS SDK + browser cart, **pickup only**, no VAT (עוסק פטור).
-  Sandbox client ID wired; swap to Live at launch.
+  **LIVE** client ID is set as the GitHub Actions secret (real money on the deployed
+  site); local `.env` keeps the **sandbox** key so `npm run dev` never charges.
+  Order number = a 6-digit code derived from the PayPal order id.
 
 ## Still to confirm
 
