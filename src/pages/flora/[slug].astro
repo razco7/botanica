@@ -3,13 +3,23 @@ import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 
 export async function getStaticPaths() {
-  const plants = await getCollection('flora');
-  return plants.map((plant) => ({ params: { slug: plant.id }, props: { plant } }));
+  const plants = (await getCollection('flora')).sort((a, b) =>
+    (a.data.shortName ?? a.data.name).localeCompare(b.data.shortName ?? b.data.name, 'he'),
+  );
+  return plants.map((plant, i) => ({
+    params: { slug: plant.id },
+    props: {
+      plant,
+      prev: plants[i - 1] ?? null,
+      next: plants[i + 1] ?? null,
+    },
+  }));
 }
 
-const { plant } = Astro.props;
+const { plant, prev, next } = Astro.props;
 const d = plant.data;
 const { Content } = await render(plant);
+const label = (p: typeof plant) => p.data.shortName ?? p.data.name;
 
 // facts flow as small label/value pairs, grouped into rows
 const facts: [string, string][] = [
@@ -31,6 +41,8 @@ const factRows = [facts.slice(0, 3), facts.slice(3)].filter((r) => r.length);
   <section class="section-magdir">
     <div class="magdir">
       <div class="magdir__text">
+        <a href="/flora-index" class="magdir__back">→ חזרה למגדיר הצמחים</a>
+
         <div class="magdir__title">
           <h1>{d.name}</h1>
           <p class="magdir__latin">{d.latinName}</p>
@@ -97,6 +109,23 @@ const factRows = [facts.slice(0, 3), facts.slice(3)].filter((r) => r.length);
         <img src={d.image} alt={d.name} width="900" height="900" />
       </div>
     </div>
+
+    {(prev || next) && (
+      <nav class="magdir__nav" aria-label="ניווט בין צמחים">
+        {prev ? (
+          <a href={`/flora/${prev.id}`} class="magdir__nav-link">
+            <span class="magdir__nav-dir">→ הצמח הקודם</span>
+            <span class="magdir__nav-name">{label(prev)}</span>
+          </a>
+        ) : <span />}
+        {next ? (
+          <a href={`/flora/${next.id}`} class="magdir__nav-link magdir__nav-link--next">
+            <span class="magdir__nav-dir">הצמח הבא ←</span>
+            <span class="magdir__nav-name">{label(next)}</span>
+          </a>
+        ) : <span />}
+      </nav>
+    )}
   </section>
 </Base>
 
@@ -119,6 +148,33 @@ const factRows = [facts.slice(0, 3), facts.slice(3)].filter((r) => r.length);
     .magdir { grid-template-columns: 1fr; margin-inline: 32px; }
   }
   @media (max-width: 479px) { .magdir { margin-inline: 12px; } }
+
+  .magdir__back {
+    display: inline-block;
+    margin-top: 24px;
+    font-size: 16px;
+    opacity: 0.6;
+  }
+  .magdir__back:hover { opacity: 1; }
+
+  /* prev / next */
+  .magdir__nav {
+    direction: rtl;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    margin-inline: var(--gutter);
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-3);
+  }
+  .magdir__nav-link { display: grid; gap: 4px; }
+  .magdir__nav-link--next { text-align: left; }
+  .magdir__nav-dir { font-size: 15px; opacity: 0.6; }
+  .magdir__nav-name { font-size: 22px; font-weight: 700; }
+  .magdir__nav-link:hover .magdir__nav-name { color: var(--accent); }
+  @media (max-width: 991px) { .magdir__nav { margin-inline: 32px; } }
+  @media (max-width: 479px) { .magdir__nav { margin-inline: 12px; } }
 
   /* .title-magdir-div — sticky white header */
   .magdir__title {
