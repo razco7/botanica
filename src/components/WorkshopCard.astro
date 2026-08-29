@@ -4,7 +4,7 @@ import { render, type CollectionEntry } from 'astro:content';
 interface Props {
   workshop: CollectionEntry<'workshops'>;
   headingLevel?: 'h2' | 'h3';
-  /** compact = text only (home page); full = image + text (workshops page) */
+  /** compact = image on top, text below (home page); full = image beside text (workshops page) */
   variant?: 'compact' | 'full';
 }
 const { workshop, headingLevel = 'h2', variant = 'full' } = Astro.props;
@@ -15,11 +15,9 @@ const signupHref = `/contact?reason=${encodeURIComponent(signupReason)}`;
 ---
 
 <article class:list={['workshop-card', `workshop-card--${variant}`]}>
-  {variant === 'full' && (
-    <div class="workshop-card__media">
-      <img src={image} alt={title} loading="lazy" width="900" height="640" />
-    </div>
-  )}
+  <div class="workshop-card__media">
+    <img src={image} alt={title} loading="lazy" width="900" height="640" />
+  </div>
   <div class="workshop-card__body">
     <Heading class="h-block">{title}</Heading>
     <div class="prose workshop-card__text"><Content /></div>
@@ -28,7 +26,17 @@ const signupHref = `/contact?reason=${encodeURIComponent(signupReason)}`;
 </article>
 
 <style>
-  /* .div-block-10 — image + text, two columns, stacked rows */
+  .workshop-card__media { border-radius: var(--radius-card); overflow: hidden; background: var(--bg-soft); }
+  .workshop-card__media img { width: 100%; object-fit: cover; }
+  .workshop-card__body :global(.h-block) { margin-bottom: 12px; }
+  .workshop-card__text { margin-bottom: 28px; }
+
+  /* .workshop-div — image on top, text below */
+  .workshop-card--compact { text-align: right; }
+  .workshop-card--compact .workshop-card__media { margin-bottom: 24px; }
+  .workshop-card--compact .workshop-card__media img { aspect-ratio: 16 / 10; }
+
+  /* .div-block-10 — image beside text, two columns */
   .workshop-card--full {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -36,18 +44,7 @@ const signupHref = `/contact?reason=${encodeURIComponent(signupReason)}`;
     gap: 40px;
     direction: rtl;
   }
-  .workshop-card__media {
-    border-radius: var(--radius-card);
-    overflow: hidden;
-    background: var(--bg-soft);
-  }
-  .workshop-card__media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
-
-  .workshop-card__body :global(.h-block) { margin-bottom: 12px; }
-  .workshop-card__text { margin-bottom: 28px; }
-
-  /* .div-block-14/15 — text only, right aligned */
-  .workshop-card--compact { text-align: right; }
+  .workshop-card--full .workshop-card__media img { aspect-ratio: 4 / 3; }
 
   @media (max-width: 767px) {
     .workshop-card--full { grid-template-columns: 1fr; gap: 24px; }
