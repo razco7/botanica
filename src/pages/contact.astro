@@ -5,138 +5,161 @@ import { contact, site } from '../data/site';
 const reasons = ['פגישת ייעוץ', 'סדנת בשמים', 'סדנת גאדג\'טים למטבח', 'שאלה כללית'];
 const formEnabled = Boolean(contact.web3formsKey);
 const redirectUrl = new URL('/thank-you', site.url).href;
+const mapEmbed = `https://www.google.com/maps?q=${encodeURIComponent(contact.address)}&output=embed`;
 ---
 
 <Base
   title="צרו קשר"
   description="יצירת קשר עם בוטניקה — קליניקה לרפואה משלימה בחדרה. טלפון 052-8717501, אפיקי מים 1 חדרה."
 >
-  <section class="section">
-    <div class="container contact">
-      <div class="contact__form-col">
-        <p class="eyebrow">צרו קשר</p>
-        <h1>נשמח לשמוע מכם</h1>
-        <p class="contact__lead">
-          מלאו את הטופס ואחזור אליכם בהקדם, או התקשרו ישירות אליי.
-        </p>
+  <section class="section container">
+    <div class="section-head"><h1>צרו קשר</h1></div>
 
-        <form
-          method="POST"
-          action="https://api.web3forms.com/submit"
-          class="contact-form"
-        >
-          <input type="hidden" name="access_key" value={contact.web3formsKey} />
-          <input type="hidden" name="subject" value="פנייה חדשה מאתר בוטניקה" />
-          <input type="hidden" name="from_name" value="אתר בוטניקה" />
-          <input type="hidden" name="redirect" value={redirectUrl} />
-          <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" />
+    <form
+      method="POST"
+      action="https://api.web3forms.com/submit"
+      class="contact-form"
+    >
+      <input type="hidden" name="access_key" value={contact.web3formsKey} />
+      <input type="hidden" name="subject" value="פנייה חדשה מאתר בוטניקה" />
+      <input type="hidden" name="from_name" value="אתר בוטניקה" />
+      <input type="hidden" name="redirect" value={redirectUrl} />
+      <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" />
 
-          <label class="field">
-            <span>שם</span>
-            <input type="text" name="name" required autocomplete="name" />
-          </label>
-
-          <label class="field">
-            <span>דואר אלקטרוני</span>
-            <input type="email" name="email" required autocomplete="email" />
-          </label>
-
-          <label class="field">
-            <span>מספר טלפון</span>
-            <input type="tel" name="phone" autocomplete="tel" />
-          </label>
-
-          <label class="field">
-            <span>סיבת הפנייה</span>
-            <select name="reason" id="contact-reason">
-              <option value="" disabled selected>נא לבחור את סיבת הפנייה</option>
-              {reasons.map((r) => <option value={r}>{r}</option>)}
-            </select>
-          </label>
-
-          <label class="field">
-            <span>הודעה</span>
-            <textarea name="message" rows="5" placeholder="הכניסו את פרטי ההודעה"></textarea>
-          </label>
-
-          <button type="submit" class="btn btn--block">שליחה</button>
-
-          {!formEnabled && (
-            <p class="form-note">
-              שליחת הטופס תופעל בקרוב. בינתיים אפשר לכתוב לנו לכתובת{' '}
-              <a href={`mailto:${contact.email}`}>{contact.email}</a>{' '}
-              או להתקשר <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a>.
-            </p>
-          )}
-        </form>
+      <div class="contact-form__row">
+        <label class="field">
+          <span class="field__label">שם</span>
+          <input type="text" name="name" required autocomplete="name" />
+        </label>
+        <label class="field">
+          <span class="field__label">דואר אלקטרוני</span>
+          <input type="email" name="email" required autocomplete="email" />
+        </label>
+        <label class="field">
+          <span class="field__label">מספר טלפון</span>
+          <input type="tel" name="phone" autocomplete="tel" />
+        </label>
       </div>
 
-      <aside class="contact__details">
-        <h2>פרטי יצירת קשר</h2>
-        <dl>
-          <dt>כתובת</dt>
-          <dd><a href={contact.mapsUrl} target="_blank" rel="noopener">{contact.address}</a></dd>
-          <dt>טלפון</dt>
-          <dd><a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a></dd>
-          <dt>דוא״ל</dt>
-          <dd><a href={`mailto:${contact.email}`}>{contact.email}</a></dd>
-          <dt>שעות מענה</dt>
-          <dd>{contact.hours}</dd>
-        </dl>
-        <div class="contact__social">
-          <a href={contact.instagram} target="_blank" rel="noopener">אינסטגרם</a>
-          <a href={contact.facebook} target="_blank" rel="noopener">פייסבוק</a>
-        </div>
-      </aside>
+      <label class="field">
+        <span class="field__label">סיבת הפנייה</span>
+        <select name="reason" id="contact-reason">
+          <option value="" disabled selected>נא לבחור את סיבת הפנייה</option>
+          {reasons.map((r) => <option value={r}>{r}</option>)}
+        </select>
+      </label>
+
+      <label class="field">
+        <span class="field__label">הודעה</span>
+        <textarea name="message" rows="6" placeholder="הכניסו את פרטי ההודעה"></textarea>
+      </label>
+
+      <button type="submit" class="btn btn--block">שליחה</button>
+
+      {!formEnabled && (
+        <p class="form-note dim">
+          שליחת הטופס תופעל בקרוב. בינתיים אפשר לכתוב לנו לכתובת{' '}
+          <a href={`mailto:${contact.email}`}>{contact.email}</a>{' '}
+          או להתקשר <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a>.
+        </p>
+      )}
+    </form>
+
+    <div class="contact-map">
+      <iframe
+        src={mapEmbed}
+        title="מפה — אפיקי מים 1, חדרה"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <div class="contact-details">
+      <h2>פרטי יצירת קשר</h2>
+      <dl>
+        <div><dt>כתובת</dt><dd><a href={contact.mapsUrl} target="_blank" rel="noopener">{contact.address}</a></dd></div>
+        <div><dt>טלפון</dt><dd><a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a></dd></div>
+        <div><dt>דוא״ל</dt><dd><a href={`mailto:${contact.email}`}>{contact.email}</a></dd></div>
+        <div><dt>שעות מענה</dt><dd>{contact.hours}</dd></div>
+      </dl>
+      <div class="contact-details__social">
+        <a href={contact.instagram} target="_blank" rel="noopener">אינסטגרם</a>
+        <a href={contact.facebook} target="_blank" rel="noopener">פייסבוק</a>
+      </div>
     </div>
   </section>
 </Base>
 
 <style>
-  .contact {
+  /* .container.cc-full-width-form-wrap — single centered column */
+  .contact-form {
+    max-width: 720px;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: 1.3fr 0.7fr;
-    gap: clamp(2rem, 6vw, 4.5rem);
-    align-items: start;
+    gap: 25px;
   }
-  .contact__lead { color: var(--ink-soft); margin-bottom: 2rem; }
+  .contact-form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 767px) { .contact-form__row { grid-template-columns: 1fr; gap: 25px; } }
 
-  .contact-form { display: grid; gap: 1.1rem; max-width: 520px; }
-  .field { display: grid; gap: 0.4rem; }
-  .field > span { font-size: 0.95rem; }
+  .field { display: grid; gap: 8px; }
+  .field__label { font-size: 18px; font-weight: 400; line-height: 24px; }
+
+  /* .text-field.cc-contact-field — square inputs */
   .field input,
   .field select,
   .field textarea {
     font: inherit;
-    padding: 0.75em 0.9em;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: #fff;
     color: var(--ink);
+    direction: rtl;
+    background: #fff;
+    border: 1px solid var(--line-2);
+    border-radius: 0;
+    padding: 18px 16px;
+    font-size: 18px;
   }
-  .field textarea { resize: vertical; }
-  .field input:focus,
-  .field select:focus,
-  .field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+  .field select { color: #999; height: 44px; padding-block: 0; }
+  .field textarea { min-height: 200px; padding-top: 12px; resize: vertical; }
+  .field ::placeholder { color: #bdbdbd; }
+  .field input:hover, .field textarea:hover, .field select:hover { border-color: #e3e6eb; }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--ink-active);
+    outline: none;
+  }
   .hp { display: none; }
-  .form-note { font-size: 0.9rem; color: var(--ink-faint); margin-top: 0.4rem; }
-  .form-note a { color: var(--accent); }
 
-  .contact__details {
-    background: var(--bg-sand);
-    border-radius: var(--radius-lg);
-    padding: clamp(1.5rem, 4vw, 2.2rem);
-  }
-  .contact__details h2 { font-size: 1.1rem; margin-bottom: 1.2rem; }
-  .contact__details dl { display: grid; gap: 0.2rem; margin: 0 0 1.5rem; }
-  .contact__details dt { font-size: 0.85rem; color: var(--ink-faint); margin-top: 0.9rem; }
-  .contact__details dd { margin: 0; font-weight: 700; }
-  .contact__social { display: flex; gap: 1rem; }
-  .contact__social a { color: var(--accent); }
+  .contact-form .btn { margin-top: 8px; }
+  .form-note { font-size: 14px; margin: 4px 0 0; text-align: center; }
+  .form-note a { text-decoration: underline; }
 
-  @media (max-width: 820px) {
-    .contact { grid-template-columns: 1fr; }
+  /* embedded map */
+  .contact-map {
+    max-width: 960px;
+    margin: 72px auto 0;
+    border-radius: var(--radius-card);
+    overflow: hidden;
   }
+  .contact-map iframe { width: 100%; height: 360px; border: 0; display: block; filter: grayscale(0.3); }
+
+  /* .contact details — centered below the map */
+  .contact-details { text-align: center; margin-top: 48px; }
+  .contact-details h2 { font-size: 20px; margin-bottom: 20px; }
+  .contact-details dl {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 48px;
+    margin: 0 0 20px;
+  }
+  .contact-details dt { font-size: 14px; opacity: 0.55; margin-bottom: 2px; }
+  .contact-details dd { margin: 0; font-weight: 700; }
+  .contact-details__social { display: flex; gap: 1.5rem; justify-content: center; }
+  .contact-details__social a { opacity: 0.6; }
+  .contact-details__social a:hover { opacity: 1; }
 </style>
 
 <script>
@@ -146,6 +169,7 @@ const redirectUrl = new URL('/thank-you', site.url).href;
     const select = document.querySelector<HTMLSelectElement>('#contact-reason');
     if (select && [...select.options].some((o) => o.value === reason)) {
       select.value = reason;
+      select.style.color = 'var(--ink)';
     }
   }
 </script>

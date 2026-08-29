@@ -1,7 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { snipcart } from '../data/site';
-import { formatPrice } from '../lib/format';
 
 interface Props {
   product: CollectionEntry<'products'>;
@@ -10,67 +9,100 @@ const { product } = Astro.props;
 const d = product.data;
 const url = `/product/${product.id}`;
 const enabled = Boolean(snipcart.apiKey);
-const hasVariant = d.variantName && d.variantOptions && d.variantOptions.length > 0;
+const hasVariant = Boolean(d.variantName && d.variantOptions && d.variantOptions.length);
 ---
 
 {enabled ? (
-  <>
-  <div class="add-to-cart">
+  <div class="atc">
     {hasVariant && (
-      <label class="add-to-cart__variant">
-        <span>{d.variantName}</span>
-        <select id={`variant-${product.id}`}>
+      <label class="atc__field">
+        <span class="atc__label">{d.variantName}</span>
+        <select id={`variant-${product.id}`} class="atc__select">
           {d.variantOptions!.map((opt) => <option value={opt}>{opt}</option>)}
         </select>
       </label>
     )}
 
-    <button
-      class="btn btn--block snipcart-add-item"
-      disabled={!d.inStock}
-      data-item-id={product.id}
-      data-item-name={d.name}
-      data-item-price={d.price}
-      data-item-url={url}
-      data-item-image={d.image}
-      data-item-description={d.summary}
-      data-item-categories={d.category}
-      data-item-min-quantity="1"
-      data-item-custom1-name={hasVariant ? d.variantName : undefined}
-      data-item-custom1-options={hasVariant ? d.variantOptions!.join('|') : undefined}
-      data-item-custom1-required={hasVariant ? 'true' : undefined}
-    >
-      {d.inStock ? 'הוספה לעגלה' : 'אזל מהמלאי'}
-    </button>
+    <div class="atc__row">
+      <label class="atc__field atc__field--qty">
+        <span class="atc__label">כמות</span>
+        <input id={`qty-${product.id}`} class="atc__qty" type="number" min="1" value="1" inputmode="numeric" />
+      </label>
+
+      <button
+        type="button"
+        class="btn snipcart-add-item atc__btn"
+        disabled={!d.inStock}
+        data-item-id={product.id}
+        data-item-name={d.name}
+        data-item-price={d.price}
+        data-item-url={url}
+        data-item-image={d.image}
+        data-item-description={d.summary}
+        data-item-categories={d.category}
+        data-item-min-quantity="1"
+        data-item-custom1-name={hasVariant ? d.variantName : undefined}
+        data-item-custom1-options={hasVariant ? d.variantOptions!.join('|') : undefined}
+        data-item-custom1-required={hasVariant ? 'true' : undefined}
+      >
+        {d.inStock ? 'הוסף לעגלה' : 'אזל מהמלאי'}
+      </button>
+    </div>
   </div>
 
-  {hasVariant && (
-    <script is:inline define:vars={{ slug: product.id }}>
-      // keep the visible <select> in sync with the Snipcart custom field
-      const sel = document.getElementById(`variant-${slug}`);
-      const btn = document.querySelector(`.snipcart-add-item[data-item-id="${slug}"]`);
-      const sync = () => btn && btn.setAttribute('data-item-custom1-value', sel.value);
-      if (sel && btn) { sync(); sel.addEventListener('change', sync); }
-    </script>
-  )}
-  </>
+  <script is:inline define:vars={{ id: product.id, hasVariant }}>
+    const btn = document.querySelector(`.snipcart-add-item[data-item-id="${id}"]`);
+    const qty = document.getElementById(`qty-${id}`);
+    const sel = hasVariant ? document.getElementById(`variant-${id}`) : null;
+    const sync = () => {
+      if (btn && qty) btn.setAttribute('data-item-quantity', String(Math.max(1, parseInt(qty.value) || 1)));
+      if (btn && sel) btn.setAttribute('data-item-custom1-value', sel.value);
+    };
+    sync();
+    qty?.addEventListener('change', sync);
+    sel?.addEventListener('change', sync);
+  </script>
 ) : (
-  <>
-  <a href="/contact" class="btn btn--block">לפרטים והזמנה — צרו קשר</a>
-  <p class="add-to-cart__note">התשלום המקוון יופעל בקרוב.</p>
-  </>
+  <div class="atc">
+    <a href="/contact" class="btn atc__btn">לפרטים והזמנה — צרו קשר</a>
+    <p class="atc__note dim">התשלום המקוון יופעל בקרוב.</p>
+  </div>
 )}
 
 <style>
-  .add-to-cart { display: grid; gap: 0.9rem; }
-  .add-to-cart__variant { display: grid; gap: 0.35rem; font-size: 0.95rem; }
-  .add-to-cart__variant select {
+  .atc { display: grid; gap: 18px; direction: rtl; }
+  .atc__field { display: grid; gap: 8px; }
+  .atc__label { font-size: 18px; font-weight: 400; line-height: 24px; }
+
+  .atc__select {
     font: inherit;
-    padding: 0.7em 0.9em;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
+    font-size: 18px;
+    color: #999;
     background: #fff;
+    border: 1px solid var(--line-2);
+    border-radius: 0;
+    padding: 12px 16px;
+    height: 44px;
   }
-  .add-to-cart__note { font-size: 0.85rem; color: var(--ink-faint); margin-top: 0.6rem; }
+  .atc__select:focus { border-color: var(--ink-active); outline: none; color: var(--ink); }
+
+  /* .product-detail-cta-wrap — quantity + button in a row */
+  .atc__row { display: flex; align-items: flex-end; gap: 10px; }
+  .atc__field--qty { flex: none; }
+  /* .text-field.cc-quantity-field */
+  .atc__qty {
+    font: inherit;
+    width: 80px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 8px 12px;
+  }
+  .atc__btn { flex: 1; }
   .btn[disabled] { opacity: 0.5; pointer-events: none; }
+  .atc__note { font-size: 14px; margin: 4px 0 0; }
+
+  @media (max-width: 991px) {
+    .atc__row { flex-direction: column; align-items: stretch; }
+  }
 </style>

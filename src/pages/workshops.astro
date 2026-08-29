@@ -12,21 +12,17 @@ const workshops = (await getCollection('workshops')).sort(
   title="סדנאות — הכנת בשמים וקרמיקה"
   description="סדנאות ייחודיות בבוטניקה: הכנת בשמים משמנים אתריים וסדנת קרמיקה ליצירת גאדג'טים למטבח. חוויה יצירתית עם נגיעה טיפולית."
 >
-  <section class="section">
-    <div class="container">
-      <div class="section-head">
-        <h1>סדנאות ומפגשים</h1>
-        <p>חוויה יצירתית עם נגיעה טיפולית, בקבוצות קטנות. להרשמה ולתיאום מועד — פנו דרך טופס יצירת הקשר.</p>
-      </div>
-      <div class="workshops-list">
-        {workshops.map((workshop) => (
-          <WorkshopCard workshop={workshop} headingLevel="h2" />
-        ))}
-      </div>
+  <section class="section container">
+    <div class="section-head"><h1>סדנאות ומפגשים</h1></div>
+    <div class="workshops-list">
+      {workshops.map((workshop) => (
+        <WorkshopCard workshop={workshop} headingLevel="h2" />
+      ))}
     </div>
   </section>
 </Base>
 
 <style>
-  .workshops-list { display: grid; gap: clamp(2.5rem, 7vw, 5rem); }
+  /* .div-block-10 rows, stacked with margin-bottom: 48px */
+  .workshops-list { display: grid; gap: 48px; }
 </style>

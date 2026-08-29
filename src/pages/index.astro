@@ -22,100 +22,132 @@ const workshops = (await getCollection('workshops')).sort(
   description="קליניקה וחנות אינטרנטית לרפואה משלימה בחדרה. טיפול בפרחי באך, ארומתרפיה, צמחי מרפא, סדנאות, מגדיר צמחים."
 >
   {promo.enabled && (
-    <section class="promo" style={`background-image: linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,.42)), url(${promo.image})`}>
-      <div class="container promo__inner">
-        <p class="promo__title">{promo.title}</p>
-        <p class="promo__subtitle">{promo.subtitle}</p>
-        <a href={promo.ctaHref} class="btn btn--light">{promo.ctaLabel}</a>
+    <div class="top-section">
+      <div
+        class="intro-header"
+        style={`background-image: linear-gradient(rgba(0,0,0,.3), rgba(0,0,0,.3)), url(${promo.image})`}
+      >
+        <div class="intro-content">
+          <div class="h-jumbo">{promo.title}</div>
+          <p class="promo-sub">{promo.subtitle}</p>
+          <a href={promo.ctaHref} class="btn btn--white">{promo.ctaLabel}</a>
+        </div>
       </div>
-    </section>
+    </div>
   )}
 
-  <section class="hero" style="background-image: linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)), url(/images/site/hero-botanic.jpg)">
-    <div class="container hero__inner">
-      <h1>ברוכים הבאים לבוטניקה</h1>
-      <p>
-        כאן באתר אני משלבת את כל האהבות שלי: טיפול טבעי, אהבת צמחים, יצירה ועיצוב.
-        תוכלו לקבוע תור לייעוץ ולטיפול בקליניקה שלי, ולמצוא מגוון מוצרים שאני מכינה
-        בעצמי — שמנים טיפוליים, פורמולות פרחי באך, בשמים טבעיים, וכן סדנאות שאני
-        מארחת וכלי קרמיקה שאני מייצרת בסדנה.
-      </p>
-      <div class="hero__actions">
-        <a href="/contact" class="btn btn--light">לחצו לקביעת תור</a>
-        <a href="/the-clinic" class="hero__link">לקריאה על הקליניקה ושיטות הטיפול ←</a>
+  <div class="top-section">
+    <div
+      class="intro-header"
+      style="background-image: linear-gradient(rgba(0,0,0,.3), rgba(0,0,0,.3)), url(/images/site/hero-botanic.jpg)"
+    >
+      <div class="intro-content">
+        <div class="intro-text">
+          <h1 class="h-jumbo">ברוכים הבאים לבוטניקה</h1>
+          <p class="intro-lead">
+            כאן באתר אני משלבת את כל האהבות שלי: טיפול טבעי, אהבת צמחים, יצירה ועיצוב.
+            תוכלו לקבוע תור לייעוץ ולטיפול בקליניקה שלי, ולמצוא מגוון מוצרים שאני מכינה
+            בעצמי — שמנים טיפוליים, פורמולות פרחי באך, בשמים טבעיים, וכן סדנאות שאני
+            מארחת וכלי קרמיקה שאני מייצרת בסדנה.
+          </p>
+        </div>
+        <a href="/contact" class="btn btn--white">לחצו לקביעת תור</a>
+        <a href="/the-clinic" class="intro-link">לקריאה על הקליניקה ושיטות הטיפול</a>
       </div>
     </div>
-  </section>
+  </div>
 
-  <section class="section">
-    <div class="container">
-      <div class="section-head">
-        <h2>מוצרים אחרונים שנוספו</h2>
-      </div>
-      <div class="grid-3">
-        {latest.map((product) => <ProductCard product={product} />)}
-      </div>
-      <p class="text-center" style="margin-top: 2.5rem">
-        <a href="/store" class="btn">לכל המוצרים בחנות</a>
-      </p>
+  <section class="section container">
+    <div class="section-head">
+      <h2 class="h-section">מוצרים אחרונים שנוספו</h2>
     </div>
+    <div class="home-products">
+      {latest.map((product) => <ProductCard product={product} />)}
+    </div>
+    <p class="text-center" style="margin-top: 48px">
+      <a href="/store" class="btn">לכל המוצרים בחנות</a>
+    </p>
   </section>
 
-  <section class="section section--sand">
-    <div class="container">
-      <div class="section-head">
-        <h2>סדנאות טיפוליות</h2>
-        <p>חוויה יצירתית עם נגיעה טיפולית — בקבוצות קטנות.</p>
-      </div>
-      <div class="workshops-list">
-        {workshops.map((workshop) => <WorkshopCard workshop={workshop} />)}
-      </div>
+  <section class="section container">
+    <div class="section-head">
+      <h2 class="h-section">סדנאות טיפוליות</h2>
+    </div>
+    <div class="home-workshops">
+      {workshops.map((workshop) => (
+        <WorkshopCard workshop={workshop} variant="compact" />
+      ))}
     </div>
   </section>
 </Base>
 
 <style>
-  .promo, .hero {
-    background-size: cover;
-    background-position: center;
+  /* .top-section-pazit — contained band around the hero card */
+  .top-section {
+    max-width: var(--maxw);
+    margin: 32px auto 0;
+    padding-inline: var(--gutter);
+  }
+  @media (max-width: 991px) { .top-section { padding-inline: 0; margin-inline: 32px; } }
+  @media (max-width: 767px) { .top-section { margin-inline: 15px; } }
+
+  /* .intro-header — rounded hero card with image + dark overlay */
+  .intro-header {
     color: #fff;
-  }
-  .promo__inner {
-    text-align: center;
-    padding-block: clamp(2.5rem, 6vw, 4rem);
-  }
-  .promo__title { font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 700; margin-bottom: 0.2em; }
-  .promo__subtitle { font-size: 1.1rem; margin-bottom: 1.4rem; }
-
-  .hero__inner {
-    max-width: 760px;
-    text-align: center;
-    margin-inline: auto;
-    padding-block: clamp(4rem, 12vw, 8rem);
-  }
-  .hero h1 { color: #fff; margin-bottom: 0.5em; }
-  .hero p { font-size: clamp(1.05rem, 2.6vw, 1.3rem); }
-  .hero__actions {
-    margin-top: 2rem;
+    background-color: var(--bg-soft);
+    background-position: 0 0, 50%;
+    background-repeat: repeat, no-repeat;
+    background-size: auto, cover;
+    border-radius: var(--radius-card);
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 1rem;
+    min-height: 540px;
+    margin-bottom: 100px;
+    padding: 64px 0;
   }
-  .hero__link { color: #fff; border-bottom: 1px solid rgba(255,255,255,.6); padding-bottom: 2px; }
-  .hero__link:hover { color: #fff; border-color: #fff; }
+  @media (max-width: 991px) {
+    .intro-header { border-radius: 0; margin-bottom: 60px; min-height: 460px; }
+  }
 
-  .grid-3 {
+  .intro-content { text-align: center; width: 80%; max-width: 1150px; }
+  .intro-text { width: 80%; margin: 0 auto 35px; }
+  @media (max-width: 991px) { .intro-content { width: 90%; } .intro-text { width: auto; } }
+
+  .h-jumbo { color: #fff; }
+  /* .text-block-6 */
+  .intro-lead { font-size: 24px; line-height: 34px; margin: 0; }
+  @media (max-width: 767px) { .intro-lead { font-size: 18px; line-height: 28px; } }
+
+  .intro-link {
+    display: inline-block;
+    margin-top: 18px;
+    color: #fff;
+    opacity: 0.85;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+    padding-bottom: 2px;
+  }
+  .intro-link:hover { opacity: 1; border-color: #fff; }
+
+  .promo-sub { font-size: 18px; margin: 0 0 22px; }
+
+  /* homepage grids */
+  .home-products {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: clamp(1.2rem, 3vw, 2.4rem);
+    gap: 30px;
   }
-  .workshops-list { display: grid; gap: clamp(2.5rem, 6vw, 4.5rem); }
+  /* .workshop-front — two text blocks side by side */
+  .home-workshops {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    direction: rtl;
+  }
 
-  @media (max-width: 820px) {
-    .grid-3 { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 991px) {
+    .home-products { grid-template-columns: 1fr 1fr; }
+    .home-workshops { grid-template-columns: 1fr; gap: 60px; }
   }
-  @media (max-width: 520px) {
-    .grid-3 { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 560px) { .home-products { grid-template-columns: 1fr; } }
 </style>

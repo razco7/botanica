@@ -4,47 +4,52 @@ import { render, type CollectionEntry } from 'astro:content';
 interface Props {
   workshop: CollectionEntry<'workshops'>;
   headingLevel?: 'h2' | 'h3';
+  /** compact = text only (home page); full = image + text (workshops page) */
+  variant?: 'compact' | 'full';
 }
-const { workshop, headingLevel = 'h3' } = Astro.props;
+const { workshop, headingLevel = 'h2', variant = 'full' } = Astro.props;
 const { title, image, signupReason } = workshop.data;
 const { Content } = await render(workshop);
 const Heading = headingLevel;
 const signupHref = `/contact?reason=${encodeURIComponent(signupReason)}`;
 ---
 
-<article class="workshop-card">
-  <div class="workshop-card__media">
-    <img src={image} alt={title} loading="lazy" width="900" height="640" />
-  </div>
-  <div class="workshop-card__body">
-    <Heading class="workshop-card__title">{title}</Heading>
-    <div class="prose workshop-card__text">
-      <slot><Content /></slot>
+<article class:list={['workshop-card', `workshop-card--${variant}`]}>
+  {variant === 'full' && (
+    <div class="workshop-card__media">
+      <img src={image} alt={title} loading="lazy" width="900" height="640" />
     </div>
-    <a href={signupHref} class="btn btn--ghost">להרשמה לסדנה</a>
+  )}
+  <div class="workshop-card__body">
+    <Heading class="h-block">{title}</Heading>
+    <div class="prose workshop-card__text"><Content /></div>
+    <a href={signupHref} class="btn">להרשמה לסדנה</a>
   </div>
 </article>
 
 <style>
-  .workshop-card {
+  /* .div-block-10 — image + text, two columns, stacked rows */
+  .workshop-card--full {
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
-    gap: clamp(1.5rem, 4vw, 3.5rem);
+    gap: 40px;
+    direction: rtl;
   }
-  .workshop-card:nth-child(even) { direction: ltr; }
-  .workshop-card:nth-child(even) > * { direction: rtl; }
   .workshop-card__media {
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-card);
     overflow: hidden;
     background: var(--bg-soft);
   }
   .workshop-card__media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
-  .workshop-card__title { margin-bottom: 0.5em; }
-  .workshop-card__text { margin-bottom: 1.6rem; }
 
-  @media (max-width: 780px) {
-    .workshop-card { grid-template-columns: 1fr; }
-    .workshop-card:nth-child(even) { direction: rtl; }
+  .workshop-card__body :global(.h-block) { margin-bottom: 12px; }
+  .workshop-card__text { margin-bottom: 28px; }
+
+  /* .div-block-14/15 — text only, right aligned */
+  .workshop-card--compact { text-align: right; }
+
+  @media (max-width: 767px) {
+    .workshop-card--full { grid-template-columns: 1fr; gap: 24px; }
   }
 </style>

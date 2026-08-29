@@ -1,93 +1,100 @@
 ---
 import { footer, contact, site } from '../data/site';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const follow = [
+  { label: 'אינסטגרם', href: contact.instagram },
+  { label: 'פייסבוק', href: contact.facebook },
+];
 ---
 
-<footer class="site-footer">
-  <div class="container site-footer__grid">
-    <div class="site-footer__brand">
-      <img src="/images/site/logo-footer.png" alt={site.name} width="90" height="90" />
-      <p>{site.name} — {site.tagline}</p>
-      <div class="site-footer__social">
-        <a href={contact.instagram} target="_blank" rel="noopener" aria-label="אינסטגרם">אינסטגרם</a>
-        <a href={contact.facebook} target="_blank" rel="noopener" aria-label="פייסבוק">פייסבוק</a>
-      </div>
-    </div>
+<div class="section-footer">
+  <div class="footer-divider"></div>
+  <div class="container">
+    <div class="footer-grid">
+      <p class="footer-copy">כל הזכויות שמורות ל{site.name} — {site.tagline} {site.year}</p>
 
-    <nav aria-label="מפת האתר">
-      <h2>ניווט</h2>
-      <ul>
-        {footer.siteLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-      </ul>
-    </nav>
+      <nav class="footer-col" aria-label={footer.columns.site}>
+        <p class="footer-col__label">{footer.columns.site}</p>
+        {footer.siteLinks.map((l) => (
+          <a class="footer-link" href={l.href} aria-current={path === l.href.replace(/\/$/, '') ? 'page' : undefined}>{l.label}</a>
+        ))}
+      </nav>
 
-    <nav aria-label="קטגוריות בחנות">
-      <h2>החנות</h2>
-      <ul>
-        {footer.shopLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-      </ul>
-    </nav>
+      <nav class="footer-col" aria-label={footer.columns.shop}>
+        <p class="footer-col__label">{footer.columns.shop}</p>
+        {footer.shopLinks.map((l) => <a class="footer-link" href={l.href}>{l.label}</a>)}
+      </nav>
 
-    <nav aria-label="עזרה">
-      <h2>עזרה</h2>
-      <ul>
-        {footer.helpLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-      </ul>
-    </nav>
+      <nav class="footer-col" aria-label={footer.columns.help}>
+        <p class="footer-col__label">{footer.columns.help}</p>
+        {footer.helpLinks.map((l) => <a class="footer-link" href={l.href}>{l.label}</a>)}
+      </nav>
 
-    <div class="site-footer__contact">
-      <h2>יצירת קשר</h2>
-      <p>
-        <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a><br />
-        <a href={`mailto:${contact.email}`}>{contact.email}</a><br />
-        <a href={contact.mapsUrl} target="_blank" rel="noopener">{contact.address}</a><br />
-        {contact.hours}
-      </p>
+      <nav class="footer-col" aria-label={footer.columns.follow}>
+        <p class="footer-col__label">{footer.columns.follow}</p>
+        {follow.map((l) => (
+          <a class="footer-link" href={l.href} target="_blank" rel="noopener">{l.label}</a>
+        ))}
+      </nav>
     </div>
   </div>
-
-  <div class="container site-footer__legal">
-    כל הזכויות שמורות ל{site.name} — {site.tagline} {site.year}©
-  </div>
-</footer>
+</div>
 
 <style>
-  .site-footer {
-    background: var(--dark);
-    color: #d7d7d7;
-    padding-block: clamp(3rem, 7vw, 4.5rem) 1.5rem;
-    font-size: 0.98rem;
+  /* .section-footer — white band, generous top margin */
+  .section-footer {
+    background: #fff;
+    margin-top: 124px;
   }
-  .site-footer__grid {
+  .footer-divider { background: var(--line-3); height: 1px; }
+
+  /* .footer — 5 evenly spread columns (copyright + 4 link columns) */
+  .footer-grid {
     display: grid;
     grid-template-columns: 1.4fr repeat(4, 1fr);
-    gap: 2rem;
-  }
-  .site-footer h2 {
-    color: #fff;
-    font-size: 0.85rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 1em;
-  }
-  .site-footer ul { list-style: none; margin: 0; padding: 0; }
-  .site-footer li + li { margin-top: 0.55em; }
-  .site-footer a:hover { color: #fff; }
-  .site-footer__brand img { margin-bottom: 0.8rem; filter: brightness(0) invert(1); opacity: 0.9; }
-  .site-footer__social { display: flex; gap: 1rem; margin-top: 0.8rem; }
-  .site-footer__legal {
-    margin-top: 2.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
-    font-size: 0.85rem;
-    color: #9a9a9a;
-    text-align: center;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: start;
+    padding-block: 32px;
   }
 
-  @media (max-width: 860px) {
-    .site-footer__grid { grid-template-columns: 1fr 1fr; }
-    .site-footer__brand { grid-column: 1 / -1; }
+  .footer-copy {
+    margin: 0;
+    opacity: var(--dim);
+    font-size: 16px;
+    max-width: 22ch;
   }
-  @media (max-width: 520px) {
-    .site-footer__grid { grid-template-columns: 1fr; }
+
+  .footer-col { display: flex; flex-direction: column; }
+  .footer-col__label {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  /* .footer-link — dimmed, brighten on hover */
+  .footer-link {
+    opacity: var(--dim);
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+  .footer-link:hover { opacity: 1; }
+  .footer-link[aria-current='page'] { opacity: 1; }
+
+  @media (max-width: 767px) {
+    .section-footer { margin-top: 72px; }
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      text-align: center;
+      justify-items: center;
+      gap: 28px 20px;
+      padding: 28px 0;
+    }
+    .footer-copy { grid-column: 1 / -1; max-width: none; }
+    .footer-col { align-items: center; }
+  }
+  @media (max-width: 479px) {
+    .footer-grid { grid-template-columns: 1fr; }
   }
 </style>

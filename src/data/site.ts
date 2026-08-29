@@ -55,6 +55,12 @@ export const categoryLabel = (slug: string) =>
   categories.find((c) => c.slug === slug)?.label ?? slug;
 
 export const footer = {
+  columns: {
+    site: 'מפת האתר',
+    shop: 'מוצרים בחנות',
+    help: 'עזרה',
+    follow: 'עיקבו אחרינו',
+  },
   siteLinks: [
     { label: 'בית', href: '/' },
     { label: 'על הקליניקה', href: '/the-clinic' },
