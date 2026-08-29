@@ -1,7 +1,7 @@
 /**
  * Site-wide configuration and content that isn't a collection entry.
  * Edit here for nav labels, contact details, footer links, the promo banner,
- * and the Snipcart / currency settings.
+ * and the shop / currency settings.
  */
 
 export const site = {
@@ -88,12 +88,23 @@ export const promo = {
 };
 
 /**
- * Snipcart powers the cart + PayPal checkout.
- * Put the PUBLIC API key in an env var: PUBLIC_SNIPCART_KEY
- * (test key while developing, live key at launch). Until it's set the
- * store still renders; the add-to-cart buttons just won't do anything.
+ * Shop / checkout.
+ *
+ * Cart lives in the browser (localStorage); checkout is handled by PayPal's
+ * JS SDK — no server, no monthly fee. Set the PayPal REST app **Client ID**
+ * in PUBLIC_PAYPAL_CLIENT_ID (sandbox while testing, live at launch).
+ * Until it's set, product pages show a "contact to order" button instead.
  */
-export const snipcart = {
-  apiKey: import.meta.env.PUBLIC_SNIPCART_KEY ?? '',
-  version: '3.7.1',
+export const shop = {
+  paypalClientId: import.meta.env.PUBLIC_PAYPAL_CLIENT_ID ?? '',
+  currency: 'ILS',
+  // Web3Forms key (same as the contact form) — a copy of each order is
+  // emailed to hello@botanicanature.com after checkout.
+  orderEmailKey: import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '',
+  // Fulfilment. Pickup only for now — no shipping fee, no address collected.
+  fulfilment: 'pickup' as 'pickup' | 'shipping',
+  // Used only when fulfilment === 'shipping'.
+  shipping: { fee: 30, freeOver: 300 },
+  // Pazit is עוסק פטור — prices are final, no VAT line.
+  vat: false,
 };

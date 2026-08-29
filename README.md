@@ -2,16 +2,16 @@
 
 A rebuild of the Botanica (Pazit Harnoy Cohen) website off Webflow, as a static
 [Astro](https://astro.build) site. RTL Hebrew. Hosted on **GitHub Pages**. Contact form
-via [Web3Forms](https://web3forms.com). Cart + PayPal checkout via
-[Snipcart](https://snipcart.com) (added at the end of the project).
+via [Web3Forms](https://web3forms.com). Shop cart is browser-side (localStorage) with
+**PayPal** JS-SDK checkout — no server, no monthly fee.
 
-Repo: `github.com/razco7/botanica` (private).
+Repo: `github.com/razco7/botanica` (public).
 
 ## Local development
 
 ```bash
 npm install
-cp .env.example .env    # optional — for the Snipcart / Web3Forms keys
+cp .env.example .env    # optional — Web3Forms + PayPal keys for the form/shop
 npm run dev             # http://localhost:4321 (or next free port)
 npm run build           # static output in dist/
 ```
@@ -28,7 +28,7 @@ Astro's `npm run dev` runs as a background daemon. Manage it with
 | Workshops | `src/content/workshops/*.md` |
 | Nav, footer, contact details, promo banner, categories, keys | `src/data/site.ts` |
 | Clinic page copy | `src/pages/the-clinic.astro` (inline) |
-| Images | `public/images/` (plain files, so product image URLs stay stable for Snipcart) |
+| Images | `public/images/` (plain files, stable URLs for PayPal line items) |
 | Old-URL redirects | `redirects` in `astro.config.mjs` (Astro emits a redirect page for each) |
 
 Product `id` (filename) = the URL slug, matching the original Webflow slugs so old links
@@ -42,9 +42,9 @@ keep working. `src/content.config.ts` defines the schema for each collection.
 **One-time setup (GitHub repo → Settings):**
 
 1. **Settings → Pages → Build and deployment → Source: GitHub Actions.**
-2. **Settings → Secrets and variables → Actions** — add (when ready):
-   - `PUBLIC_WEB3FORMS_KEY` — contact-form key (see below)
-   - `PUBLIC_SNIPCART_KEY` — cart key (added at the end)
+2. **Settings → Secrets and variables → Actions** — add:
+   - `PUBLIC_WEB3FORMS_KEY` — contact-form + order-email key (see below)
+   - `PUBLIC_PAYPAL_CLIENT_ID` — shop checkout (see below)
 3. Push to `main` → the Action builds and publishes.
 
 Until DNS is switched, the deployed site isn't reachable at the custom domain. To preview
@@ -75,17 +75,34 @@ server, no account beyond an email confirmation).
 
 Without the key, the form renders but shows an "email us directly" note instead.
 
-## Snipcart (cart + PayPal) — end of project
+## Shop — cart + PayPal checkout
 
-1. Create a Snipcart account; copy the **public** API key into `PUBLIC_SNIPCART_KEY`
-   (TEST key while testing, LIVE key at launch).
-2. Snipcart dashboard: connect **PayPal** as the payment gateway (needs a PayPal
-   **Business** account), set currency **ILS**, add shipping rates, add
-   `www.botanicanature.com` to allowed domains, re-create the "30% off" discount if wanted.
-3. Snipcart crawls each `data-item-url` (`/product/<slug>`) to validate price, so product
-   pages must be live first.
+The cart lives in `localStorage` (`src/lib/cart.ts`). `/cart` renders the line items and
+mounts PayPal's JS-SDK Smart Buttons (`src/lib/cart-page.ts`). No server, no platform fee
+— you only pay PayPal's per-transaction fee.
 
-Without a key, the store still renders; product pages show a "contact to order" button.
+**Setup:**
+
+1. Open a **PayPal Business** account. At [developer.paypal.com](https://developer.paypal.com)
+   → **Apps & Credentials** → create a Merchant app → copy the **Client ID**.
+2. Put it in `PUBLIC_PAYPAL_CLIENT_ID` — `.env` for local dev, Actions secret for deploys.
+   Sandbox client ID while testing, **Live** client ID at launch.
+3. Config in `src/data/site.ts` → `shop`: `currency` (ILS), `fulfilment` (`'pickup'` —
+   no shipping fee, no address collected; switch to `'shipping'` + set `shipping.fee` /
+   `freeOver` when she ships), `vat` (false — עוסק פטור).
+4. Each completed order is also emailed to `hello@botanicanature.com` via Web3Forms
+   (reuses `PUBLIC_WEB3FORMS_KEY`), plus PayPal's own receipt to buyer + seller.
+
+Without a client ID: the store still renders, product pages show a "contact to order"
+button, and the header cart icon is hidden.
+
+**Testing:** use a PayPal **sandbox** buyer account (developer.paypal.com → Sandbox →
+Accounts) to run a full fake checkout.
+
+**Price integrity:** totals are computed in the browser, so a determined user could
+tamper with them before paying. Acceptable for a small handmade shop (same risk as
+PayPal's own button generator); revisit with a serverless order-verify function if
+volume grows.
 
 ## Data provenance
 
@@ -98,7 +115,8 @@ resolution). Clinic-page method images are 1024×526 on the live site; the hero 
 
 - Facebook: `https://www.facebook.com/profile.php?id=61585424797847`
 - Contact email: `hello@botanicanature.com`
-- PayPal / Snipcart: deferred to the end.
+- Checkout: PayPal JS SDK + browser cart, **pickup only**, no VAT (עוסק פטור).
+  Sandbox client ID wired; swap to Live at launch.
 
 ## Still to confirm
 

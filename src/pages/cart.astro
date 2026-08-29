@@ -1,0 +1,143 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { shop, contact } from '../data/site';
+
+const products = await getCollection('products');
+const productMap = Object.fromEntries(
+  products.map((p) => [
+    p.id,
+    {
+      name: p.data.name,
+      price: p.data.price,
+      image: p.data.image,
+      variantName: p.data.variantName ?? null,
+      inStock: p.data.inStock,
+    },
+  ]),
+);
+
+const enabled = Boolean(shop.paypalClientId);
+const config = {
+  productMap,
+  currency: shop.currency,
+  fulfilment: shop.fulfilment,
+  shipping: shop.shipping,
+  orderEmailKey: shop.orderEmailKey,
+};
+const sdkSrc = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(
+  shop.paypalClientId,
+)}&currency=${shop.currency}&intent=capture&disable-funding=paylater`;
+---
+
+<Base title="עגלת הקניות" description="עגלת הקניות שלכם בחנות בוטניקה.">
+  <section class="section container cart-page">
+    <div class="section-head"><h1>עגלת הקניות</h1></div>
+
+    {enabled ? (
+      <>
+        <div id="cart-root" class="cart-root">טוען…</div>
+        <script type="application/json" id="cart-config" set:html={JSON.stringify(config)}></script>
+        <script is:inline src={sdkSrc}></script>
+        <script src="../lib/cart-page.ts"></script>
+      </>
+    ) : (
+      <p class="cart-empty">
+        החנות תיפתח בקרוב. בינתיים אפשר להזמין דרך <a href="/contact">טופס יצירת הקשר</a>
+        או בטלפון <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a>.
+      </p>
+    )}
+  </section>
+</Base>
+
+<style is:global>
+  /* global: the cart rows are injected via innerHTML so scoped styles won't reach them */
+  .cart-page { max-width: 900px; }
+
+  .cart-empty { text-align: center; font-size: 20px; opacity: 0.7; }
+  .cart-empty a { text-decoration: underline; }
+
+  .cart-list { list-style: none; margin: 0 0 24px; padding: 0; }
+  .cart-row {
+    display: grid;
+    grid-template-columns: 88px 1fr auto auto;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+  }
+  .cart-row:last-child { border-bottom: 1px solid var(--line); }
+  .cart-row__img {
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: var(--bg-soft);
+  }
+  .cart-row__info { display: grid; gap: 3px; }
+  .cart-row__name { font-weight: 700; font-size: 18px; }
+  .cart-row__variant { font-size: 14px; opacity: 0.6; }
+  .cart-row__unit { font-size: 14px; opacity: 0.6; }
+  .cart-row__qty {
+    font: inherit;
+    width: 64px;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+  }
+  .cart-row__line { font-weight: 700; min-width: 5.5ch; text-align: left; }
+  .cart-row__remove {
+    background: none;
+    border: 0;
+    font-size: 18px;
+    line-height: 1;
+    padding: 6px;
+    cursor: pointer;
+    opacity: 0.5;
+  }
+  .cart-row__remove:hover { opacity: 1; color: var(--accent); }
+
+  .cart-summary { margin-inline-start: auto; max-width: 380px; }
+  .cart-summary__line {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 17px;
+  }
+  .cart-summary__total {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0;
+    margin-top: 6px;
+    border-top: 1px solid var(--line);
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .cart-note { font-size: 14px; opacity: 0.6; margin: 4px 0 18px; }
+  #paypal-buttons { margin-top: 6px; min-height: 48px; }
+  .cart-error {
+    margin-top: 12px;
+    color: var(--accent);
+    font-size: 15px;
+    text-align: center;
+  }
+
+  .cart-actions { margin-top: 28px; }
+  .cart-actions a { text-decoration: underline; opacity: 0.7; }
+
+  @media (max-width: 560px) {
+    .cart-row {
+      grid-template-columns: 64px 1fr auto;
+      grid-template-areas:
+        'img info remove'
+        'img qty  line';
+      row-gap: 8px;
+    }
+    .cart-row__img { grid-area: img; width: 64px; height: 64px; }
+    .cart-row__info { grid-area: info; }
+    .cart-row__remove { grid-area: remove; align-self: start; }
+    .cart-row__qty { grid-area: qty; }
+    .cart-row__line { grid-area: line; align-self: center; }
+    .cart-summary { max-width: none; }
+  }
+</style>

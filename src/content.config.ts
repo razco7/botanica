@@ -8,7 +8,7 @@ const products = defineCollection({
     summary: z.string(), // short one-liner for cards + meta description
     category: z.enum(['bach', 'ceramic', 'oils']),
     price: z.number(), // ILS
-    image: z.string(), // /images/products/<id>.jpg (kept in /public for Snipcart)
+    image: z.string(), // /images/products/<id>.jpg (kept in /public so the URL is stable)
     volume: z.string().optional(),
     inStock: z.boolean().default(true),
     variantName: z.string().optional(),

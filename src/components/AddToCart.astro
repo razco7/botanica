@@ -1,23 +1,24 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { snipcart } from '../data/site';
+import { shop } from '../data/site';
 
 interface Props {
   product: CollectionEntry<'products'>;
 }
 const { product } = Astro.props;
 const d = product.data;
-const url = `/product/${product.id}`;
-const enabled = Boolean(snipcart.apiKey);
+const enabled = Boolean(shop.paypalClientId);
 const hasVariant = Boolean(d.variantName && d.variantOptions && d.variantOptions.length);
 ---
 
 {enabled ? (
-  <div class="atc">
+  <>
+  <form class="atc" data-product-id={product.id} data-in-stock={String(d.inStock)}>
     {hasVariant && (
       <label class="atc__field">
         <span class="atc__label">{d.variantName}</span>
-        <select id={`variant-${product.id}`} class="atc__select">
+        <select class="atc__select" data-variant required>
+          <option value="" disabled selected>{`בחרו ${d.variantName}`}</option>
           {d.variantOptions!.map((opt) => <option value={opt}>{opt}</option>)}
         </select>
       </label>
@@ -26,81 +27,72 @@ const hasVariant = Boolean(d.variantName && d.variantOptions && d.variantOptions
     <div class="atc__row">
       <label class="atc__field atc__field--qty">
         <span class="atc__label">כמות</span>
-        <input id={`qty-${product.id}`} class="atc__qty" type="number" min="1" value="1" inputmode="numeric" />
+        <input class="atc__qty" type="number" min="1" value="1" inputmode="numeric" data-qty />
       </label>
-
-      <button
-        type="button"
-        class="btn snipcart-add-item atc__btn"
-        disabled={!d.inStock}
-        data-item-id={product.id}
-        data-item-name={d.name}
-        data-item-price={d.price}
-        data-item-url={url}
-        data-item-image={d.image}
-        data-item-description={d.summary}
-        data-item-categories={d.category}
-        data-item-min-quantity="1"
-        data-item-custom1-name={hasVariant ? d.variantName : undefined}
-        data-item-custom1-options={hasVariant ? d.variantOptions!.join('|') : undefined}
-        data-item-custom1-required={hasVariant ? 'true' : undefined}
-      >
-        {d.inStock ? 'הוסף לעגלה' : 'אזל מהמלאי'}
+      <button type="submit" class="btn atc__btn" disabled={!d.inStock}>
+        {d.inStock ? 'הוספה לעגלה' : 'אזל מהמלאי'}
       </button>
     </div>
-  </div>
+    <p class="atc__hint dim">התשלום דרך PayPal (גם בכרטיס אשראי). איסוף עצמי בחדרה.</p>
+  </form>
 
-  <script is:inline define:vars={{ id: product.id, hasVariant }}>
-    const btn = document.querySelector(`.snipcart-add-item[data-item-id="${id}"]`);
-    const qty = document.getElementById(`qty-${id}`);
-    const sel = hasVariant ? document.getElementById(`variant-${id}`) : null;
-    const sync = () => {
-      if (btn && qty) btn.setAttribute('data-item-quantity', String(Math.max(1, parseInt(qty.value) || 1)));
-      if (btn && sel) btn.setAttribute('data-item-custom1-value', sel.value);
-    };
-    sync();
-    qty?.addEventListener('change', sync);
-    sel?.addEventListener('change', sync);
+  <script>
+    import { addToCart } from '../lib/cart';
+    document.querySelectorAll<HTMLFormElement>('form.atc').forEach((form) => {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (form.dataset.inStock !== 'true') return;
+        const id = form.dataset.productId!;
+        const variantEl = form.querySelector<HTMLSelectElement>('[data-variant]');
+        if (variantEl && !variantEl.value) { variantEl.focus(); return; }
+        const variant = variantEl?.value || undefined;
+        const qtyEl = form.querySelector<HTMLInputElement>('[data-qty]')!;
+        const qty = Math.max(1, parseInt(qtyEl.value) || 1);
+        addToCart(id, variant, qty);
+        const btn = form.querySelector<HTMLButtonElement>('.atc__btn')!;
+        const original = btn.textContent;
+        btn.textContent = 'נוסף לעגלה ✓';
+        btn.disabled = true;
+        setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 1600);
+      });
+    });
   </script>
+  </>
 ) : (
-  <div class="atc">
-    <a href="/contact" class="btn atc__btn">לפרטים והזמנה — צרו קשר</a>
-    <p class="atc__note dim">התשלום המקוון יופעל בקרוב.</p>
-  </div>
+  <>
+  <a href="/contact" class="btn atc__btn">לפרטים והזמנה — צרו קשר</a>
+  <p class="atc__hint dim">התשלום המקוון ייפתח בקרוב.</p>
+  </>
 )}
 
 <style>
   .atc { display: grid; gap: 18px; direction: rtl; }
   .atc__field { display: grid; gap: 8px; }
-  .atc__label { font-size: 18px; font-weight: 400; line-height: 24px; }
-
+  .atc__label { font-size: 18px; line-height: 24px; }
   .atc__select {
     font: inherit;
     font-size: 18px;
-    color: #999;
     background: #fff;
     border: 1px solid var(--line-2);
     border-radius: 0;
     padding: 12px 16px;
-    height: 44px;
+    height: 46px;
   }
-  .atc__select:focus { border-color: var(--ink-active); outline: none; color: var(--ink); }
+  .atc__select:focus { border-color: var(--ink-active); outline: none; }
 
-  /* .product-detail-cta-wrap — quantity + button in a row */
   .atc__row { display: flex; align-items: flex-end; gap: 10px; }
   .atc__field--qty { flex: none; }
-  /* .text-field.cc-quantity-field */
   .atc__qty {
     font: inherit;
-    width: 80px;
+    width: 82px;
     background: #fff;
     border: 1px solid var(--line);
     border-radius: 3px;
-    padding: 8px 12px;
+    padding: 10px 12px;
   }
   .atc__btn { flex: 1; }
   .btn[disabled] { opacity: 0.5; pointer-events: none; }
-  .atc__note { font-size: 14px; margin: 4px 0 0; }
+  .atc__hint { font-size: 14px; margin: 2px 0 0; }
 
   @media (max-width: 991px) {
     .atc__row { flex-direction: column; align-items: stretch; }

@@ -26,8 +26,8 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          PUBLIC_SNIPCART_KEY: ${{ secrets.PUBLIC_SNIPCART_KEY }}
           PUBLIC_WEB3FORMS_KEY: ${{ secrets.PUBLIC_WEB3FORMS_KEY }}
+          PUBLIC_PAYPAL_CLIENT_ID: ${{ secrets.PUBLIC_PAYPAL_CLIENT_ID }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
