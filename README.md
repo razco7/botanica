@@ -74,15 +74,21 @@ categories and photos were pulled directly from the live Webflow site
 oils/Bach and 1106×1325 for ceramics — that's the source resolution Pazit uploaded).
 The clinic-page method images are only 1024×526 on the live site; the hero is 1536×857.
 
+## Confirmed
+
+- Facebook: `https://www.facebook.com/profile.php?id=61585424797847`
+- Contact-form email: `hello@botanicanature.com` (also set this as the notification
+  address in Netlify → Forms after deploy)
+- **PayPal / Snipcart: deferred to the end of the project.** The site runs fine without
+  it — product pages show a "contact to order" button until `PUBLIC_SNIPCART_KEY` is set.
+
 ## Still to confirm with Pazit
 
-- Whether she has **higher-resolution originals** than what's on Webflow (the current
-  images are the Webflow originals, not upscales — they're fine for web but that's the
-  ceiling unless she has the raw files).
+- Whether she has **higher-resolution originals** than what's on Webflow (current images
+  are the Webflow originals, fine for web but that's the ceiling unless she has raw files).
 - The age-variant dropdown wording — captured from the live site as
   `תינוקות (חצי שנה עד שנתיים) / ילדים (2-6 שנים) / ילדים בוגרים (6-10 שנים) / בוגרים (גילאי 10 ומעלה)`,
   currently on `hdy-stdy`, `st-rb-tslkhvt-mvqvt`, `easy-breezy`, `tummy-calmy`.
-- Facebook page URL (`src/data/site.ts` — the live site's link pointed at Webflow's own page).
 - Flora index — only 3 plants exist on the live site; add more `.md` files as needed.
 - Consultation & ceramic products have no long description on the live site; the short
   factual blurbs here were written to fill the gap — reword as she likes.

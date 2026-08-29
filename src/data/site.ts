@@ -24,8 +24,8 @@ export const contact = {
   mapsUrl: 'https://www.google.com/maps/search/?api=1&query=אפיקי+מים+1+חדרה',
   hours: 'א׳–ה׳ 9:00–15:00',
   instagram: 'https://www.instagram.com/pazit_harnoy_cohen/',
-  facebook: 'https://www.facebook.com/', // TODO: confirm the real Botanica Facebook page URL
-  email: '', // TODO: destination address for the contact form (Netlify Forms notification)
+  facebook: 'https://www.facebook.com/profile.php?id=61585424797847',
+  email: 'hello@botanicanature.com', // contact-form notifications (set in Netlify Forms too)
 };
 
 export const nav = [

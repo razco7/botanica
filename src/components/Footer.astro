@@ -38,6 +38,7 @@ import { footer, contact, site } from '../data/site';
       <h2>יצירת קשר</h2>
       <p>
         <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a><br />
+        <a href={`mailto:${contact.email}`}>{contact.email}</a><br />
         <a href={contact.mapsUrl} target="_blank" rel="noopener">{contact.address}</a><br />
         {contact.hours}
       </p>

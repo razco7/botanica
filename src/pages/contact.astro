@@ -70,6 +70,8 @@ const reasons = ['פגישת ייעוץ', 'סדנת בשמים', 'סדנת גא�
           <dd><a href={contact.mapsUrl} target="_blank" rel="noopener">{contact.address}</a></dd>
           <dt>טלפון</dt>
           <dd><a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a></dd>
+          <dt>דוא״ל</dt>
+          <dd><a href={`mailto:${contact.email}`}>{contact.email}</a></dd>
           <dt>שעות מענה</dt>
           <dd>{contact.hours}</dd>
         </dl>
