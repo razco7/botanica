@@ -168,7 +168,7 @@ p:last-child { margin-bottom: 0; }
 }
 .btn:hover { color: #fff; background-color: var(--ink-hover); }
 .btn:active { background-color: var(--ink-active); }
-.btn--white, .btn--light { color: var(--ink-2); background-color: #fff; padding: 16px 35px; font-size: 14px; line-height: 26px; }
+.btn--white, .btn--light { color: var(--ink-2); background-color: #fff; padding: 16px 35px; font-size: 18px; line-height: 30px; }
 .btn--white:hover, .btn--light:hover { background-color: rgba(255,255,255,.8); color: var(--ink-2); }
 .btn--ghost { /* alias: same as the default dark button */ }
 .btn--block { width: 100%; }
