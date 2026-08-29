@@ -51,8 +51,10 @@ const workshops = (await getCollection('workshops')).sort(
             מארחת וכלי קרמיקה שאני מייצרת בסדנה.
           </p>
         </div>
-        <a href="/contact" class="btn btn--white">לחצו לקביעת תור</a>
-        <a href="/the-clinic" class="intro-link">לקריאה על הקליניקה ושיטות הטיפול</a>
+        <div class="intro-cta">
+          <a href="/contact" class="btn btn--white">לחצו לקביעת תור</a>
+          <a href="/the-clinic" class="intro-link">לקריאה על הקליניקה ושיטות הטיפול</a>
+        </div>
       </div>
     </div>
   </div>
@@ -112,6 +114,7 @@ const workshops = (await getCollection('workshops')).sort(
 
   .intro-content { text-align: center; width: 80%; max-width: 1150px; }
   .intro-text { width: 80%; margin: 0 auto 35px; }
+  .intro-cta { display: flex; flex-direction: column; align-items: center; gap: 18px; }
   @media (max-width: 991px) { .intro-content { width: 90%; } .intro-text { width: auto; } }
 
   .h-jumbo { color: #fff; }
@@ -121,9 +124,10 @@ const workshops = (await getCollection('workshops')).sort(
 
   .intro-link {
     display: inline-block;
-    margin-top: 18px;
     color: #fff;
     opacity: 0.85;
+    font-size: 18px;
+    line-height: 30px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.6);
     padding-bottom: 2px;
   }
