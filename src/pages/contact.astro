@@ -1,8 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
-import { contact } from '../data/site';
+import { contact, site } from '../data/site';
 
 const reasons = ['פגישת ייעוץ', 'סדנת בשמים', 'סדנת גאדג\'טים למטבח', 'שאלה כללית'];
+const formEnabled = Boolean(contact.web3formsKey);
+const redirectUrl = new URL('/thank-you', site.url).href;
 ---
 
 <Base
@@ -19,17 +21,15 @@ const reasons = ['פגישת ייעוץ', 'סדנת בשמים', 'סדנת גא�
         </p>
 
         <form
-          name="contact"
           method="POST"
-          data-netlify="true"
-          netlify-honeypot="bot-field"
-          action="/thank-you"
+          action="https://api.web3forms.com/submit"
           class="contact-form"
         >
-          <input type="hidden" name="form-name" value="contact" />
-          <p class="hp">
-            <label>אל תמלאו שדה זה: <input name="bot-field" /></label>
-          </p>
+          <input type="hidden" name="access_key" value={contact.web3formsKey} />
+          <input type="hidden" name="subject" value="פנייה חדשה מאתר בוטניקה" />
+          <input type="hidden" name="from_name" value="אתר בוטניקה" />
+          <input type="hidden" name="redirect" value={redirectUrl} />
+          <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" />
 
           <label class="field">
             <span>שם</span>
@@ -60,6 +60,14 @@ const reasons = ['פגישת ייעוץ', 'סדנת בשמים', 'סדנת גא�
           </label>
 
           <button type="submit" class="btn btn--block">שליחה</button>
+
+          {!formEnabled && (
+            <p class="form-note">
+              שליחת הטופס תופעל בקרוב. בינתיים אפשר לכתוב לנו לכתובת{' '}
+              <a href={`mailto:${contact.email}`}>{contact.email}</a>{' '}
+              או להתקשר <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a>.
+            </p>
+          )}
         </form>
       </div>
 
@@ -110,7 +118,9 @@ const reasons = ['פגישת ייעוץ', 'סדנת בשמים', 'סדנת גא�
   .field input:focus,
   .field select:focus,
   .field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
-  .hp { position: absolute; left: -9999px; }
+  .hp { display: none; }
+  .form-note { font-size: 0.9rem; color: var(--ink-faint); margin-top: 0.4rem; }
+  .form-note a { color: var(--accent); }
 
   .contact__details {
     background: var(--bg-sand);

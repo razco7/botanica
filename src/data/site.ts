@@ -25,7 +25,14 @@ export const contact = {
   hours: 'א׳–ה׳ 9:00–15:00',
   instagram: 'https://www.instagram.com/pazit_harnoy_cohen/',
   facebook: 'https://www.facebook.com/profile.php?id=61585424797847',
-  email: 'hello@botanicanature.com', // contact-form notifications (set in Netlify Forms too)
+  email: 'hello@botanicanature.com',
+  /**
+   * The contact form posts to Web3Forms (free, no server needed — works on GitHub Pages).
+   * Get a key: https://web3forms.com → enter hello@botanicanature.com → confirm the email.
+   * Put it in PUBLIC_WEB3FORMS_KEY (.env locally, repo Actions secret for deploys).
+   * Until it's set, the form shows a "email us directly" fallback.
+   */
+  web3formsKey: import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '',
 };
 
 export const nav = [
