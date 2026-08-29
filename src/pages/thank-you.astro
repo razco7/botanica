@@ -6,23 +6,13 @@ import Base from '../layouts/Base.astro';
   <section class="section">
     <div class="container narrow text-center">
       <h1>תודה שפניתם 🌿</h1>
-      <p class="prose">ההודעה נקלטה ואחזור אליכם בהקדם.</p>
-      <div class="thanks-actions">
-        <a href="/store" class="btn">לחנות</a>
-        <a href="/flora-index" class="btn">למגדיר הצמחים</a>
-        <a href="/" class="btn btn--ghost">לדף הבית</a>
-      </div>
+      <p class="prose">ההודעה נקלטה ואחזור אליכם בהקדם. בינתיים אפשר לעיין ב<a href="/store">חנות</a> או ב<a href="/flora-index">מגדיר הצמחים</a>.</p>
+      <p style="margin-top: 2rem"><a href="/" class="btn">חזרה לדף הבית</a></p>
     </div>
   </section>
 </Base>
 
 <style>
   .narrow { max-width: 620px; margin-inline: auto; }
-  .thanks-actions {
-    margin-top: 2.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-  }
+  .narrow .prose a { text-decoration: underline; text-underline-offset: 3px; }
 </style>
