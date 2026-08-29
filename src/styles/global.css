@@ -1,11 +1,11 @@
 /* ==========================================================================
    Botanica — global styles
    Values transcribed from the original Webflow stylesheet
-   (reference/original-webflow.css). RTL Hebrew, Alef, #1a1b1f on #fff.
+   (reference/original-webflow.css). RTL Hebrew, #1a1b1f on #fff.
    Webflow breakpoints: 991 / 767 / 479.
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap');
 
 :root {
   --bg: #ffffff;
@@ -28,7 +28,7 @@
   --radius-lg: 16px;
   --dark: #1a1b1f;
 
-  --font: 'Alef', 'Assistant', 'Rubik', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --font: 'Rubik', 'Assistant', 'Alef', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
 
   --maxw: 1460px;
   --gutter: 72px;
