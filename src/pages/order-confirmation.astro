@@ -7,12 +7,14 @@ import { contact } from '../data/site';
   <section class="section container narrow text-center">
     <h1>תודה על ההזמנה! 🌿</h1>
     <p class="prose">
-      התשלום התקבל ונשלח אליכם אישור במייל מ־PayPal.
+      התשלום התקבל ואישור תשלום נשלח אליכם במייל מ־PayPal.
+      הקבלה תימסר לכם באיסוף.
       <span id="order-id"></span>
     </p>
     <p class="prose">
-      מדובר באיסוף עצמי מהקליניקה בחדרה — ניצור איתכם קשר לתיאום מועד.
-      לשאלות: <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a>.
+      האיסוף הוא מהקליניקה בחדרה (אפיקי מים 1). <strong>יש לתאם איסוף מראש</strong> —
+      התקשרו <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a>
+      או כתבו ל־<a href={`mailto:${contact.email}`}>{contact.email}</a> עם מספר ההזמנה.
     </p>
     <p style="margin-top: 2rem"><a href="/store" class="btn">חזרה לחנות</a></p>
   </section>

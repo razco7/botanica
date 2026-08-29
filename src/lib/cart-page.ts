@@ -124,7 +124,7 @@ function init(el: HTMLElement) {
       <p class="cart-note">${
         cfg.fulfilment === 'shipping'
           ? 'המחיר סופי. פרטי משלוח ייאספו בתשלום.'
-          : 'המחיר סופי. איסוף עצמי מהקליניקה בחדרה — נתאם איתכם מועד.'
+          : 'המחיר סופי. איסוף עצמי מהקליניקה בחדרה — יש לתאם מועד מראש בטלפון 052-8717501.'
       }</p>`;
 
     if (!paypalMounted && !checkoutEl.hidden) {
@@ -213,23 +213,19 @@ function init(el: HTMLElement) {
     const buyer = details?.payer?.name
       ? `${details.payer.name.given_name ?? ''} ${details.payer.name.surname ?? ''}`.trim()
       : '';
-    const body = [
-      `מספר הזמנה (PayPal): ${details.id}`,
-      buyer && `שם: ${buyer}`,
-      details?.payer?.email_address && `דוא״ל: ${details.payer.email_address}`,
-      '',
-      ...ls.map(
+    const buyerEmail = details?.payer?.email_address || '';
+    const items = ls
+      .map(
         (l) =>
-          `• ${l.p.name}${l.variant ? ` (${l.variant})` : ''} × ${l.qty} = ${money(
-            l.p.price * l.qty,
-          )}`,
-      ),
-      '',
-      `סה״כ: ${money(t.total)}`,
-      cfg.fulfilment === 'pickup' ? 'איסוף עצמי' : `כולל משלוח ${money(t.ship)}`,
-    ]
-      .filter(Boolean)
+          `• ${l.p.name}${l.variant ? ` (${l.variant})` : ''} — ${l.qty} × ${money(
+            l.p.price,
+          )} = ${money(l.p.price * l.qty)}`,
+      )
       .join('\n');
+    const fulfilment =
+      cfg.fulfilment === 'pickup'
+        ? 'איסוף עצמי מהקליניקה בחדרה'
+        : `משלוח (${money(t.ship)})`;
 
     await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
@@ -238,9 +234,14 @@ function init(el: HTMLElement) {
         access_key: cfg.orderEmailKey,
         subject: `הזמנה חדשה מהאתר — ${money(t.total)}`,
         from_name: 'חנות בוטניקה',
-        name: buyer || 'לקוח/ה',
-        email: details?.payer?.email_address || 'noreply@botanicanature.com',
-        message: body,
+        // `email` drives the reply-to, so a reply reaches the customer
+        email: buyerEmail || 'noreply@botanicanature.com',
+        // Hebrew keys => Hebrew section labels in the notification email
+        'שם הלקוח': buyer || '—',
+        'אימייל הלקוח': buyerEmail || '—',
+        'מספר הזמנה בּ־PayPal': details.id || '—',
+        'פריטים': items,
+        'סה״כ לתשלום': `${money(t.total)} · ${fulfilment}`,
       }),
     });
   }
