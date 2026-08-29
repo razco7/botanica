@@ -66,11 +66,23 @@ and optionally an autoresponder. Submissions redirect to `/thank-you`.
   4. Add the live domain in Snipcart; switch `PUBLIC_SNIPCART_KEY` to the live key.
   5. Keep the Webflow site published until DNS has propagated, then unpublish.
 
+## Data provenance
+
+All product names, prices, one-line summaries, descriptions, volumes, stock status,
+categories and photos were pulled directly from the live Webflow site
+(product JSON-LD + rendered CMS content + the CDN originals, which are 1400×1400 for
+oils/Bach and 1106×1325 for ceramics — that's the source resolution Pazit uploaded).
+The clinic-page method images are only 1024×526 on the live site; the hero is 1536×857.
+
 ## Still to confirm with Pazit
 
-- Real product photos / copy / volumes / stock (current data was reconstructed from the
-  live site). Search the repo for `TODO`.
-- The age-variant dropdown on some oils (currently on `hdy-stdy`, `st-rb-tslkhvt-mvqvt`,
-  `easy-breezy`, `tummy-calmy`).
-- Facebook page URL (`src/data/site.ts`).
-- Flora index — only 3 plants exist; add more `.md` files as written.
+- Whether she has **higher-resolution originals** than what's on Webflow (the current
+  images are the Webflow originals, not upscales — they're fine for web but that's the
+  ceiling unless she has the raw files).
+- The age-variant dropdown wording — captured from the live site as
+  `תינוקות (חצי שנה עד שנתיים) / ילדים (2-6 שנים) / ילדים בוגרים (6-10 שנים) / בוגרים (גילאי 10 ומעלה)`,
+  currently on `hdy-stdy`, `st-rb-tslkhvt-mvqvt`, `easy-breezy`, `tummy-calmy`.
+- Facebook page URL (`src/data/site.ts` — the live site's link pointed at Webflow's own page).
+- Flora index — only 3 plants exist on the live site; add more `.md` files as needed.
+- Consultation & ceramic products have no long description on the live site; the short
+  factual blurbs here were written to fill the gap — reword as she likes.

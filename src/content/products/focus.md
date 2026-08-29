@@ -1,6 +1,6 @@
 ---
 name: טיפות לקשב וריכוז
-summary: תמצית למיקוד בלימודים ובמשימות היום
+summary: תמצית לפוקוס ומיקוד בלימודים ובמשימות היום
 category: bach
 price: 50
 image: /images/products/focus.jpg
