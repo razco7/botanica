@@ -2,7 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import AddToCart from '../../components/AddToCart.astro';
-import { categoryLabel } from '../../data/site';
+import { categoryLabel, site } from '../../data/site';
 import { formatPrice } from '../../lib/format';
 
 export async function getStaticPaths() {
@@ -13,9 +13,32 @@ export async function getStaticPaths() {
 const { product } = Astro.props;
 const d = product.data;
 const { Content } = await render(product);
+
+const url = `${site.url}/product/${product.id}/`;
+const productLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: d.name,
+  description: d.summary,
+  image: new URL(d.image, site.url).href,
+  category: categoryLabel(d.category),
+  brand: { '@type': 'Brand', name: site.name },
+  offers: {
+    '@type': 'Offer',
+    url,
+    price: d.price.toFixed(2),
+    priceCurrency: site.currency,
+    availability: d.inStock
+      ? 'https://schema.org/InStock'
+      : 'https://schema.org/OutOfStock',
+    itemCondition: 'https://schema.org/NewCondition',
+    seller: { '@type': 'Organization', name: site.name },
+  },
+};
 ---
 
 <Base title={d.name} description={d.summary} image={d.image}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(productLd)} />
   <section class="section container">
     <nav class="crumbs">
       <a href="/store">החנות</a> /

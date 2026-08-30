@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { site } from '../data/site';
+import { site, contact } from '../data/site';
 
 interface Props {
   title?: string;
@@ -10,6 +10,8 @@ interface Props {
   image?: string;
   /** set true on the home page so the title isn't "בוטניקה | בוטניקה" */
   bareTitle?: boolean;
+  /** keep the page out of search indexes (cart, thank-you, etc.) */
+  noindex?: boolean;
 }
 
 const {
@@ -17,6 +19,7 @@ const {
   description = site.defaultDescription,
   image = site.ogImage,
   bareTitle = false,
+  noindex = false,
 } = Astro.props;
 
 const pageTitle = !title
@@ -27,6 +30,42 @@ const pageTitle = !title
 
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImageUrl = new URL(image, site.url).href;
+
+// Site-wide business info for Google (local search, knowledge panel).
+const businessLd = {
+  '@context': 'https://schema.org',
+  '@type': 'HealthAndBeautyBusiness',
+  '@id': `${site.url}/#business`,
+  name: site.name,
+  alternateName: 'Botanica',
+  description: site.defaultDescription,
+  url: site.url,
+  telephone: contact.phoneHref,
+  email: contact.email,
+  image: new URL('/images/site/og.jpg', site.url).href,
+  logo: new URL('/images/site/logo.png', site.url).href,
+  priceRange: '₪₪',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'אפיקי מים 1',
+    addressLocality: 'חדרה',
+    addressCountry: 'IL',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: site.geo.lat,
+    longitude: site.geo.lng,
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'],
+      opens: '09:00',
+      closes: '15:00',
+    },
+  ],
+  sameAs: [contact.instagram, contact.facebook],
+};
 ---
 
 <!doctype html>
@@ -37,6 +76,7 @@ const ogImageUrl = new URL(image, site.url).href;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/images/site/logo.png" />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
 
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
@@ -52,6 +92,22 @@ const ogImageUrl = new URL(image, site.url).href;
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <script type="application/ld+json" set:html={JSON.stringify(businessLd)} />
+    <slot name="head" />
+
+    {site.gaId && (
+      <>
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${site.gaId}`}></script>
+        <script is:inline define:vars={{ gaId: site.gaId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', gaId);
+        </script>
+      </>
+    )}
   </head>
   <body>
     <a href="#main" class="visually-hidden">דלגו לתוכן</a>

@@ -15,6 +15,11 @@ export const site = {
   locale: 'he_IL',
   currency: 'ILS',
   year: new Date().getFullYear(),
+  // Google Analytics 4 Measurement ID (G-XXXXXXXXXX). Set PUBLIC_GA_ID.
+  gaId: import.meta.env.PUBLIC_GA_ID ?? '',
+  // Approx coords for אפיקי מים 1, חדרה — used in LocalBusiness structured data.
+  // TODO: fine-tune from Google Maps if needed.
+  geo: { lat: 32.4408, lng: 34.9196 },
 };
 
 export const contact = {

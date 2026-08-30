@@ -34,8 +34,8 @@ const factRows = [facts.slice(0, 3), facts.slice(3)].filter((r) => r.length);
 ---
 
 <Base
-  title={`${d.name} — ${d.latinName}`}
-  description={d.identification.slice(0, 155)}
+  title={`${d.shortName ?? d.name} (${d.latinName}) — מגדיר הצמחים`}
+  description={`${d.shortName ?? d.name}: ${d.activity}`.slice(0, 155)}
   image={d.image}
 >
   <section class="section-magdir">
