@@ -221,23 +221,34 @@ function init(el: HTMLElement) {
         ? 'איסוף עצמי מהקליניקה בחדרה'
         : `משלוח (${money(t.ship)})`;
 
-    // Web3Forms mangles non-ASCII field *names*, so everything goes in one
-    // `message` field — the body itself is Hebrew.
-    const message = [
-      `מספר הזמנה: ${ref}`,
-      `שם הלקוח: ${buyer || '—'}`,
-      `אימייל הלקוח: ${buyerEmail || '—'}`,
-      '',
-      'פריטים:',
-      ...ls.map(
+    const items = ls
+      .map(
         (l) =>
           `• ${l.p.name}${l.variant ? ` (${l.variant})` : ''} — ${l.qty} × ${money(
             l.p.price,
           )} = ${money(l.p.price * l.qty)}`,
-      ),
+      )
+      .join('\n');
+
+    // Written to read as a customer confirmation (Web3Forms autoresponder
+    // sends this same text to the buyer). Everything goes in one `message`
+    // field because Web3Forms mangles non-ASCII field names.
+    const message = [
+      `שלום${buyer ? ` ${buyer}` : ''},`,
       '',
-      `סה״כ לתשלום: ${money(t.total)}`,
-      `אופן מסירה: ${fulfilment}`,
+      'תודה על הזמנתך מבוטניקה 🌿 התשלום התקבל.',
+      '',
+      `מספר הזמנה: ${ref}`,
+      '',
+      'פריטים:',
+      items,
+      '',
+      `סה״כ ששולם: ${money(t.total)}`,
+      `אופן מסירה: ${fulfilment} (אפיקי מים 1, חדרה)`,
+      '',
+      'חשוב: יש לתאם מועד איסוף מראש —',
+      'טלפון 052-8717501 או hello@botanicanature.com (ציינו את מספר ההזמנה).',
+      'הקבלה תימסר באיסוף.',
       '',
       `אסמכתת PayPal: ${details.id || '—'}`,
     ].join('\n');
@@ -247,9 +258,10 @@ function init(el: HTMLElement) {
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({
         access_key: cfg.orderEmailKey,
-        subject: `הזמנה חדשה ${ref} — ${money(t.total)}`,
-        from_name: 'חנות בוטניקה',
+        subject: `הזמנה ${ref} — ${money(t.total)}`,
+        from_name: 'בוטניקה',
         name: buyer || 'לקוח/ה',
+        // reply-to for the shop notification; recipient for the autoresponder
         email: buyerEmail || 'noreply@botanicanature.com',
         message,
       }),

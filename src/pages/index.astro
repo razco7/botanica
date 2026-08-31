@@ -90,7 +90,7 @@ const workshops = (await getCollection('workshops')).sort(
     margin: 32px auto 0;
     padding-inline: var(--gutter);
   }
-  @media (max-width: 991px) { .top-section { padding-inline: 0; margin-inline: 32px; } }
+  @media (max-width: 991px) { .top-section { padding-inline: 0; margin-inline: 24px; } }
   @media (max-width: 767px) { .top-section { margin-inline: 15px; } }
 
   /* .intro-header — rounded hero card with image + dark overlay */
@@ -109,7 +109,7 @@ const workshops = (await getCollection('workshops')).sort(
     padding: 64px 0;
   }
   @media (max-width: 991px) {
-    .intro-header { border-radius: 0; margin-bottom: 60px; min-height: 460px; }
+    .intro-header { margin-bottom: 60px; min-height: 460px; }
   }
 
   .intro-content { text-align: center; width: 80%; max-width: 1150px; }
