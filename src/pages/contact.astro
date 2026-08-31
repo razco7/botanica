@@ -109,7 +109,7 @@ const mapEmbed = `https://www.google.com/maps?q=${encodeURIComponent(contact.add
   .field { display: grid; gap: 8px; }
   .field__label { font-size: 18px; font-weight: 400; line-height: 24px; }
 
-  /* .text-field.cc-contact-field — square inputs */
+  /* .text-field.cc-contact-field */
   .field input,
   .field select,
   .field textarea {
@@ -118,7 +118,7 @@ const mapEmbed = `https://www.google.com/maps?q=${encodeURIComponent(contact.add
     direction: rtl;
     background: #fff;
     border: 1px solid var(--line-2);
-    border-radius: 0;
+    border-radius: var(--radius-btn);
     padding: 12px 16px;
     font-size: 17px;
     line-height: 1.4;
