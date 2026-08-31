@@ -123,7 +123,17 @@ const mapEmbed = `https://www.google.com/maps?q=${encodeURIComponent(contact.add
     font-size: 17px;
     line-height: 1.4;
   }
-  .field select { color: #999; height: 46px; padding-block: 0; }
+  .field select {
+    color: #999;
+    height: 46px;
+    padding-block: 0;
+    padding-left: 44px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%231a1b1f' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 16px center;
+  }
   .field textarea { min-height: 160px; padding-top: 12px; resize: vertical; }
   .field ::placeholder { color: #bdbdbd; }
   .field input:hover, .field textarea:hover, .field select:hover { border-color: #e3e6eb; }
