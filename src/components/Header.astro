@@ -149,7 +149,7 @@ const shopOpen = Boolean(shop.paypalClientId);
 
   @media (max-width: 991px) {
     .nav-toggle { display: flex; }
-    .site-header__inner { flex-wrap: wrap; }
+    .site-header__inner { flex-wrap: wrap; align-items: center; }
     .site-nav {
       flex-basis: 100%;
       margin-inline-start: 0;
@@ -172,10 +172,10 @@ const shopOpen = Boolean(shop.paypalClientId);
     .site-header.is-open .nav-toggle span:nth-child(2) { opacity: 0; }
     .site-header.is-open .nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    /* right→left: logo · cart · [space] · menu */
-    .site-header__logo { order: 1; }
-    .cart-btn { order: 2; margin-inline-start: 12px; }
-    .nav-toggle { order: 3; margin-inline-start: auto; }
+    /* menu (start / right) · logo (centered) · cart (end / left) */
+    .nav-toggle { order: 1; margin-inline-start: 0; }
+    .site-header__logo { order: 2; margin-inline: auto; }
+    .cart-btn { order: 3; margin-inline-start: 0; }
     .site-nav { order: 4; }
   }
 </style>
