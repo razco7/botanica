@@ -11,12 +11,16 @@ import { contact } from '../data/site';
       מספר הזמנה: <strong id="order-n"></strong>
     </p>
 
+    <div class="order-box" id="order-box" hidden>
+      <ul id="order-items"></ul>
+      <p class="order-total">סה״כ ששולם: <strong id="order-total"></strong></p>
+    </div>
+
     <p class="prose">
-      התשלום התקבל ואישור תשלום נשלח אליכם במייל מ־PayPal.
-      הקבלה תימסר לכם באיסוף.
+      התשלום התקבל ואישור נשלח אליכם במייל. הקבלה תימסר לכם באיסוף.
     </p>
     <p class="prose">
-      האיסוף הוא מהקליניקה בחדרה (אפיקי מים 1). <strong>יש לתאם איסוף מראש</strong> —
+      האיסוף מהקליניקה בחדרה (אפיקי מים 1). <strong>יש לתאם איסוף מראש</strong> —
       התקשרו <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a>
       או כתבו ל־<a href={`mailto:${contact.email}`}>{contact.email}</a> עם מספר ההזמנה.
     </p>
@@ -29,28 +33,76 @@ import { contact } from '../data/site';
 <style>
   .narrow { max-width: 620px; margin-inline: auto; }
   .narrow .prose a { text-decoration: underline; text-underline-offset: 3px; }
-  .order-ref { font-size: 20px; margin: 0.5em 0 1.5em; }
+  .order-ref { font-size: 20px; margin: 0.5em 0 1em; }
   .order-ref strong { font-size: 26px; letter-spacing: 0.06em; }
+
+  .order-box {
+    text-align: right;
+    background: #f7f7f7;
+    border-radius: var(--radius-card);
+    padding: 20px 22px;
+    margin: 0 0 1.75rem;
+  }
+  .order-box ul { list-style: none; margin: 0; padding: 0; }
+  .order-box li {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px 0;
+    font-size: 16px;
+  }
+  .order-box li + li { border-top: 1px solid #e6e6e6; }
+  .order-box .order-total {
+    margin: 12px 0 0;
+    padding-top: 12px;
+    border-top: 2px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+  }
+
   .order-id { opacity: 0.45; font-size: 13px; margin-top: 1.5em; }
 </style>
 
 <script>
   import { clearCart } from '../lib/cart';
   clearCart();
+
+  const money = (n: number) => `₪ ${n.toFixed(2)}`;
   const params = new URLSearchParams(location.search);
   const n = params.get('n');
   const id = params.get('id');
+
   if (n) {
-    const wrap = document.getElementById('order-ref');
-    const el = document.getElementById('order-n');
-    if (el) el.textContent = n;
-    if (wrap) (wrap as HTMLElement).hidden = false;
+    document.getElementById('order-n')!.textContent = n;
+    (document.getElementById('order-ref') as HTMLElement).hidden = false;
   }
   if (id) {
-    const el = document.getElementById('order-id');
-    if (el) {
-      el.textContent = `אסמכתת PayPal: ${id}`;
-      (el as HTMLElement).hidden = false;
+    const el = document.getElementById('order-id')!;
+    el.textContent = `אסמכתת PayPal: ${id}`;
+    (el as HTMLElement).hidden = false;
+  }
+
+  try {
+    const raw = sessionStorage.getItem('botanica-last-order');
+    if (raw) {
+      const o = JSON.parse(raw);
+      if (o && o.ref === n && Array.isArray(o.items) && o.items.length) {
+        const list = document.getElementById('order-items')!;
+        list.innerHTML = o.items
+          .map((it: any) => {
+            const name = it.variant ? `${it.name} (${it.variant})` : it.name;
+            return `<li><span>${name} × ${it.qty}</span><span>${money(
+              it.price * it.qty,
+            )}</span></li>`;
+          })
+          .join('');
+        document.getElementById('order-total')!.textContent = money(o.total);
+        (document.getElementById('order-box') as HTMLElement).hidden = false;
+      }
+      sessionStorage.removeItem('botanica-last-order');
     }
+  } catch {
+    /* ignore */
   }
 </script>

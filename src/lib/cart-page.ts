@@ -184,9 +184,27 @@ function init(el: HTMLElement) {
           actions.order.capture().then((details: any) => {
             const ls = lines();
             const t = totals(ls);
-            emailOrder(details, ls, t).catch(() => {});
-            clearCart();
             const ref = shortRef(details.id || '');
+            emailOrder(details, ls, t).catch(() => {});
+            try {
+              sessionStorage.setItem(
+                'botanica-last-order',
+                JSON.stringify({
+                  ref,
+                  id: details.id || '',
+                  total: t.total,
+                  items: ls.map((l) => ({
+                    name: l.p.name,
+                    variant: l.variant || null,
+                    qty: l.qty,
+                    price: l.p.price,
+                  })),
+                }),
+              );
+            } catch {
+              /* ignore */
+            }
+            clearCart();
             location.href = `/order-confirmation?n=${ref}&id=${encodeURIComponent(
               details.id || '',
             )}`;
