@@ -21,6 +21,24 @@ const workshops = (await getCollection('workshops')).sort(
   bareTitle
   description="קליניקה וחנות אינטרנטית לרפואה משלימה בחדרה. טיפול בפרחי באך, ארומתרפיה, צמחי מרפא, סדנאות, מגדיר צמחים."
 >
+  <Fragment slot="head">
+    {/* Preload the LCP hero image per viewport (Chrome honours `media` here). */}
+    <link
+      rel="preload"
+      as="image"
+      href="/images/site/hero-botanic-mobile.avif"
+      type="image/avif"
+      media="(max-width: 767px)"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/images/site/hero-botanic.avif"
+      type="image/avif"
+      media="(min-width: 768px)"
+    />
+  </Fragment>
+
   {promo.enabled && (
     <div class="top-section">
       <div
@@ -37,10 +55,7 @@ const workshops = (await getCollection('workshops')).sort(
   )}
 
   <div class="top-section">
-    <div
-      class="intro-header"
-      style="background-image: linear-gradient(rgba(0,0,0,.3), rgba(0,0,0,.3)), url(/images/site/hero-botanic.jpg)"
-    >
+    <div class="intro-header intro-header--home">
       <div class="intro-content">
         <div class="intro-text">
           <h1 class="h-jumbo">ברוכים הבאים לבוטניקה</h1>
@@ -110,6 +125,32 @@ const workshops = (await getCollection('workshops')).sort(
   }
   @media (max-width: 991px) {
     .intro-header { margin-bottom: 60px; min-height: 460px; }
+  }
+
+  /* home hero image — AVIF with JPEG fallback, lighter file on phones */
+  .intro-header--home {
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+      url('/images/site/hero-botanic.jpg');
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+      image-set(
+        url('/images/site/hero-botanic.avif') type('image/avif'),
+        url('/images/site/hero-botanic.jpg') type('image/jpeg')
+      );
+  }
+  @media (max-width: 767px) {
+    .intro-header--home {
+      background-image:
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        url('/images/site/hero-botanic.jpg');
+      background-image:
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        image-set(
+          url('/images/site/hero-botanic-mobile.avif') type('image/avif'),
+          url('/images/site/hero-botanic.jpg') type('image/jpeg')
+        );
+    }
   }
 
   .intro-content { text-align: center; width: 80%; max-width: 1150px; }
