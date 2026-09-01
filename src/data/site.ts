@@ -71,6 +71,7 @@ export const footer = {
     { label: 'חנות', href: '/store' },
     { label: 'סדנאות', href: '/workshops' },
     { label: 'צרו קשר', href: '/contact' },
+    { label: 'מדיניות פרטיות', href: '/privacy' },
   ],
   shopLinks: [
     { label: 'פרחי באך', href: '/store/bach' },

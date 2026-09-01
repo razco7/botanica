@@ -1,0 +1,77 @@
+---
+// Non-blocking cookie notice. Analytics loads regardless; this just informs
+// and links to the privacy policy. Dismissal is remembered per browser.
+---
+
+<div class="cookie-notice" data-cookie-notice hidden>
+  <p class="cookie-notice__text">
+    אתר זה משתמש בעוגיות לניתוח סטטיסטי ולתפעול תקין.
+    <a href="/privacy">למדיניות הפרטיות</a>
+  </p>
+  <button type="button" class="cookie-notice__btn" data-cookie-accept>הבנתי</button>
+</div>
+
+<script is:inline>
+  (function () {
+    var KEY = 'botanica-cookie-ack';
+    var el = document.querySelector('[data-cookie-notice]');
+    if (!el) return;
+    var acked;
+    try {
+      acked = localStorage.getItem(KEY);
+    } catch (e) {
+      acked = null;
+    }
+    if (acked) return;
+    el.hidden = false;
+    el.querySelector('[data-cookie-accept]').addEventListener('click', function () {
+      try {
+        localStorage.setItem(KEY, '1');
+      } catch (e) {}
+      el.hidden = true;
+    });
+  })();
+</script>
+
+<style>
+  .cookie-notice {
+    position: fixed;
+    inset-block-end: 0;
+    inset-inline: 0;
+    z-index: 90;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px 20px;
+    padding: 14px 20px;
+    background: #fff;
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+  }
+  .cookie-notice__text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .cookie-notice__text a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .cookie-notice__btn {
+    flex: none;
+    padding: 8px 20px;
+    font: inherit;
+    font-size: 14px;
+    color: #fff;
+    background: var(--ink);
+    border: 0;
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+  }
+  .cookie-notice__btn:hover {
+    background: var(--ink-hover);
+  }
+</style>
