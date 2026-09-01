@@ -34,6 +34,8 @@
 </script>
 
 <style>
+  /* class `display` would otherwise beat the UA [hidden] rule */
+  .cookie-notice[hidden] { display: none; }
   .cookie-notice {
     position: fixed;
     inset-block-end: 0;
