@@ -6,6 +6,10 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://www.botanicanature.com',
   trailingSlash: 'ignore',
+
+  // Inline the ~11 KB stylesheet into each page — removes a render-blocking
+  // request, which matters most on throttled mobile.
+  build: { inlineStylesheets: 'always' },
   integrations: [
     sitemap({
       // keep transactional / thin pages out of the sitemap (they're noindex too)

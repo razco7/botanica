@@ -99,16 +99,27 @@ const businessLd = {
     <slot name="head" />
 
     {site.gaId && (
-      <>
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${site.gaId}`}></script>
-        <script is:inline define:vars={{ gaId: site.gaId }}>
-          window.dataLayer = window.dataLayer || [];
-          function gtag() { dataLayer.push(arguments); }
-          gtag('js', new Date());
-          gtag('config', gaId);
-        </script>
-      </>
+      <script is:inline define:vars={{ gaId: site.gaId }}>
+        {/* Load GA lazily — on first interaction or after load — so it
+            doesn't compete with the critical render on mobile. */}
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', gaId);
+        let gaLoaded = false;
+        function loadGA() {
+          if (gaLoaded) return;
+          gaLoaded = true;
+          const s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+          document.head.appendChild(s);
+        }
+        ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach((evt) =>
+          addEventListener(evt, loadGA, { once: true, passive: true })
+        );
+        addEventListener('load', () => setTimeout(loadGA, 3000));
+      </script>
     )}
   </head>
   <body>
