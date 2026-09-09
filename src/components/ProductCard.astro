@@ -7,7 +7,7 @@ interface Props {
 }
 const { product } = Astro.props;
 const { name, summary, price, image, inStock } = product.data;
-const href = `/product/${product.id}`;
+const href = `/product/${product.id}/`;
 ---
 
 <article class="product-card">

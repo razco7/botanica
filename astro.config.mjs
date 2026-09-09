@@ -5,7 +5,9 @@ import sitemap from '@astrojs/sitemap';
 // No `base` needed because it's a custom domain, not a project path.
 export default defineConfig({
   site: 'https://www.botanicanature.com',
-  trailingSlash: 'ignore',
+  // GitHub Pages serves and canonicalises the slashed form, so the whole site
+  // (config, internal links, redirects) must agree on trailing slashes.
+  trailingSlash: 'always',
 
   // Inline the ~11 KB stylesheet into each page — removes a render-blocking
   // request, which matters most on throttled mobile.
@@ -23,10 +25,10 @@ export default defineConfig({
   // Static redirects for old Webflow URLs. Astro emits a small HTML redirect
   // page for each in the static build (GitHub Pages has no server-side redirects).
   redirects: {
-    '/category/bach': '/store/bach',
-    '/category/ceramic': '/store/ceramic',
-    '/category/oils': '/store/oils',
-    '/flora/levander': '/flora/lavender',
-    '/checkout': '/store',
+    '/category/bach/': '/store/bach/',
+    '/category/ceramic/': '/store/ceramic/',
+    '/category/oils/': '/store/oils/',
+    '/flora/levander/': '/flora/lavender/',
+    '/checkout/': '/store/',
   },
 });

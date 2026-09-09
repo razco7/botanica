@@ -41,8 +41,8 @@ const productLd = {
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(productLd)} />
   <section class="section container">
     <nav class="crumbs">
-      <a href="/store">החנות</a> /
-      <a href={`/store/${d.category}`}>{categoryLabel(d.category)}</a> /
+      <a href="/store/">החנות</a> /
+      <a href={`/store/${d.category}/`}>{categoryLabel(d.category)}</a> /
       <span>{d.name}</span>
     </nav>
 

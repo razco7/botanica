@@ -4,7 +4,7 @@ import { contact, site } from '../data/site';
 
 const reasons = ['פגישת ייעוץ', 'סדנת בשמים', 'סדנת גאדג\'טים למטבח', 'שאלה כללית'];
 const formEnabled = Boolean(contact.web3formsKey);
-const redirectUrl = new URL('/thank-you', site.url).href;
+const redirectUrl = new URL('/thank-you/', site.url).href;
 const mapEmbed = `https://www.google.com/maps?q=${encodeURIComponent(contact.address)}&output=embed`;
 ---
 
@@ -199,7 +199,7 @@ const mapEmbed = `https://www.google.com/maps?q=${encodeURIComponent(contact.add
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.success) {
-        location.href = '/thank-you';
+        location.href = '/thank-you/';
         return;
       }
       throw new Error(data.message || 'שגיאה בשליחה');

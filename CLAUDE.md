@@ -49,6 +49,11 @@ Webflow slugs so inbound links keep working.
 - Styling was rebuilt against the **real Webflow CSS** saved at
   `reference/original-webflow.css` — match that, not guesses. Reference HTML snapshots
   are in `reference/` too.
+- **Trailing slashes are mandatory.** `trailingSlash: 'always'` — GitHub Pages
+  canonicalises to the slashed form, so **every internal link must end with `/`**
+  (`/store/`, `` `/product/${id}/` ``, `/contact/?reason=…`). An unslashed internal link
+  is an SEO bug (301 hop) and 404s in `astro dev`. Redirect entries in `astro.config.mjs`
+  are slashed on both sides.
 - **JSX whitespace trap:** Astro drops whitespace between text and an inline element when
   they're on separate lines. Put a space before a line-ending link with `{' '}`
   (e.g. `…דרך{' '}\n<a>…</a>`). This has bitten us repeatedly.

@@ -41,7 +41,7 @@ const factRows = [facts.slice(0, 3), facts.slice(3)].filter((r) => r.length);
   <section class="section-magdir">
     <div class="magdir">
       <div class="magdir__text">
-        <a href="/flora-index" class="magdir__back">→ חזרה למגדיר הצמחים</a>
+        <a href="/flora-index/" class="magdir__back">→ חזרה למגדיר הצמחים</a>
 
         <div class="magdir__title">
           <h1>{d.name}</h1>
@@ -113,13 +113,13 @@ const factRows = [facts.slice(0, 3), facts.slice(3)].filter((r) => r.length);
     {(prev || next) && (
       <nav class="magdir__nav" aria-label="ניווט בין צמחים">
         {prev ? (
-          <a href={`/flora/${prev.id}`} class="magdir__nav-link">
+          <a href={`/flora/${prev.id}/`} class="magdir__nav-link">
             <span class="magdir__nav-dir">→ הצמח הקודם</span>
             <span class="magdir__nav-name">{label(prev)}</span>
           </a>
         ) : <span />}
         {next ? (
-          <a href={`/flora/${next.id}`} class="magdir__nav-link magdir__nav-link--next">
+          <a href={`/flora/${next.id}/`} class="magdir__nav-link magdir__nav-link--next">
             <span class="magdir__nav-dir">הצמח הבא ←</span>
             <span class="magdir__nav-name">{label(next)}</span>
           </a>

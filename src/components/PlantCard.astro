@@ -6,7 +6,7 @@ interface Props {
 }
 const { plant } = Astro.props;
 const { name, shortName, latinName, image } = plant.data;
-const href = `/flora/${plant.id}`;
+const href = `/flora/${plant.id}/`;
 ---
 
 <a href={href} class="plant-card">

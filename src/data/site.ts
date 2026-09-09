@@ -41,11 +41,11 @@ export const contact = {
 };
 
 export const nav = [
-  { label: 'מגדיר צמחים', href: '/flora-index' },
-  { label: 'על הקליניקה', href: '/the-clinic' },
-  { label: 'חנות', href: '/store' },
-  { label: 'סדנאות', href: '/workshops' },
-  { label: 'צרו קשר', href: '/contact' },
+  { label: 'מגדיר צמחים', href: '/flora-index/' },
+  { label: 'על הקליניקה', href: '/the-clinic/' },
+  { label: 'חנות', href: '/store/' },
+  { label: 'סדנאות', href: '/workshops/' },
+  { label: 'צרו קשר', href: '/contact/' },
 ];
 
 export const categories = [
@@ -67,16 +67,16 @@ export const footer = {
   },
   siteLinks: [
     { label: 'בית', href: '/' },
-    { label: 'על הקליניקה', href: '/the-clinic' },
-    { label: 'חנות', href: '/store' },
-    { label: 'סדנאות', href: '/workshops' },
-    { label: 'צרו קשר', href: '/contact' },
-    { label: 'מדיניות פרטיות', href: '/privacy' },
+    { label: 'על הקליניקה', href: '/the-clinic/' },
+    { label: 'חנות', href: '/store/' },
+    { label: 'סדנאות', href: '/workshops/' },
+    { label: 'צרו קשר', href: '/contact/' },
+    { label: 'מדיניות פרטיות', href: '/privacy/' },
   ],
   shopLinks: [
-    { label: 'פרחי באך', href: '/store/bach' },
-    { label: 'קרמיקה', href: '/store/ceramic' },
-    { label: 'שמנים', href: '/store/oils' },
+    { label: 'פרחי באך', href: '/store/bach/' },
+    { label: 'קרמיקה', href: '/store/ceramic/' },
+    { label: 'שמנים', href: '/store/oils/' },
   ],
 };
 

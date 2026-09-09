@@ -47,14 +47,14 @@ function totals(ls: ReturnType<typeof lines>) {
 function init(el: HTMLElement) {
   // one-time skeleton — the PayPal container is never re-rendered
   el.innerHTML = `
-    <p id="cart-empty" class="cart-empty" hidden>העגלה ריקה. <a href="/store">חזרה לחנות</a></p>
+    <p id="cart-empty" class="cart-empty" hidden>העגלה ריקה. <a href="/store/">חזרה לחנות</a></p>
     <div id="cart-items"></div>
     <div id="cart-checkout" hidden>
       <div id="cart-summary" class="cart-summary"></div>
       <div id="paypal-buttons"></div>
       <p class="cart-error" id="cart-error" hidden></p>
     </div>
-    <p class="cart-actions" id="cart-actions"><a href="/store">המשך בקנייה</a></p>
+    <p class="cart-actions" id="cart-actions"><a href="/store/">המשך בקנייה</a></p>
   `;
   const emptyEl = el.querySelector<HTMLElement>('#cart-empty')!;
   const itemsEl = el.querySelector<HTMLElement>('#cart-items')!;
@@ -205,7 +205,7 @@ function init(el: HTMLElement) {
               /* ignore */
             }
             clearCart();
-            location.href = `/order-confirmation?n=${ref}&id=${encodeURIComponent(
+            location.href = `/order-confirmation/?n=${ref}&id=${encodeURIComponent(
               details.id || '',
             )}`;
           }),

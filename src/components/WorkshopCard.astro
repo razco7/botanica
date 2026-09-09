@@ -11,7 +11,7 @@ const { workshop, headingLevel = 'h2', variant = 'full' } = Astro.props;
 const { title, image, signupReason } = workshop.data;
 const { Content } = await render(workshop);
 const Heading = headingLevel;
-const signupHref = `/contact?reason=${encodeURIComponent(signupReason)}`;
+const signupHref = `/contact/?reason=${encodeURIComponent(signupReason)}`;
 ---
 
 <article class:list={['workshop-card', `workshop-card--${variant}`]}>

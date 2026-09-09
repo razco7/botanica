@@ -27,13 +27,13 @@ const { label, items } = Astro.props;
 >
   <section class="section">
     <div class="container">
-      <nav class="crumbs"><a href="/store">החנות</a> / {label}</nav>
+      <nav class="crumbs"><a href="/store/">החנות</a> / {label}</nav>
       <div class="section-head"><h1>{label}</h1></div>
 
       <div class="cat-tabs">
-        <a href="/store">כל המוצרים</a>
+        <a href="/store/">כל המוצרים</a>
         {categories.map((c) => (
-          <a href={`/store/${c.slug}`} aria-current={c.slug === category ? 'page' : undefined}>
+          <a href={`/store/${c.slug}/`} aria-current={c.slug === category ? 'page' : undefined}>
             {c.label}
           </a>
         ))}
