@@ -41,9 +41,9 @@ export const contact = {
 };
 
 export const nav = [
+  { label: 'על הקליניקה', href: '/the-clinic/' },
   { label: 'מגדיר צמחים', href: '/flora-index/' },
   { label: 'מאמרים', href: '/articles/' },
-  { label: 'על הקליניקה', href: '/the-clinic/' },
   { label: 'חנות', href: '/store/' },
   { label: 'סדנאות', href: '/workshops/' },
   { label: 'צרו קשר', href: '/contact/' },
