@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+
+// drafts show only in `astro dev`
+const articles = (await getCollection('articles'))
+  .filter((a) => import.meta.env.DEV || !a.data.draft)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<Base
+  title="מאמרים"
+  description="מאמרים על צמחי מרפא, פטריות מרפא, ארומתרפיה ופרחי באך — מאת פזית הרנוי כהן, הרבליסטית קלינית בבוטניקה, חדרה."
+>
+  <section class="section container articles-page">
+    <div class="section-head">
+      <h1>מאמרים</h1>
+      <p>על צמחי מרפא, פטריות מרפא ורפואה טבעית — מהניסיון בקליניקה.</p>
+    </div>
+
+    {articles.length > 0 ? (
+      <div class="articles-list">
+        {articles.map((article) => <ArticleCard article={article} />)}
+      </div>
+    ) : (
+      <p class="articles-empty">בקרוב יעלו כאן מאמרים חדשים. בינתיים אפשר לעיין ב<a href="/flora-index/">מגדיר הצמחים</a>.</p>
+    )}
+  </section>
+</Base>
+
+<style>
+  .articles-page { max-width: 820px; }
+  .articles-list { display: grid; gap: 32px; }
+  .articles-list :global(.article-card:first-child) { border-top: 0; padding-top: 0; }
+  .articles-empty { text-align: center; font-size: 18px; color: var(--ink-soft); }
+  .articles-empty a { text-decoration: underline; text-underline-offset: 3px; }
+</style>

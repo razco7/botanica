@@ -54,4 +54,17 @@ const workshops = defineCollection({
   }),
 });
 
-export const collections = { products, flora, workshops };
+const articles = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/articles' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(), // card excerpt + meta description (~150 chars)
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    image: z.string().optional(), // /images/articles/<id>.jpg — optional lead image
+    // draft entries render only in `astro dev`, never in the production build
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { products, flora, workshops, articles };

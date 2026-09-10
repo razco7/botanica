@@ -42,11 +42,20 @@ export const contact = {
 
 export const nav = [
   { label: 'מגדיר צמחים', href: '/flora-index/' },
+  { label: 'מאמרים', href: '/articles/' },
   { label: 'על הקליניקה', href: '/the-clinic/' },
   { label: 'חנות', href: '/store/' },
   { label: 'סדנאות', href: '/workshops/' },
   { label: 'צרו קשר', href: '/contact/' },
 ];
+
+/** The practitioner — used for article bylines and Person structured data. */
+export const author = {
+  name: 'פזית הרנוי כהן',
+  jobTitle: 'הרבליסטית קלינית',
+  url: '/the-clinic/',
+  image: '/images/site/pazit.jpeg',
+};
 
 export const categories = [
   { slug: 'bach', label: 'פרחי באך' },
@@ -67,6 +76,7 @@ export const footer = {
   },
   siteLinks: [
     { label: 'בית', href: '/' },
+    { label: 'מאמרים', href: '/articles/' },
     { label: 'על הקליניקה', href: '/the-clinic/' },
     { label: 'חנות', href: '/store/' },
     { label: 'סדנאות', href: '/workshops/' },

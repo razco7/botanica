@@ -25,6 +25,7 @@ her old Webflow site, live at **https://www.botanicanature.com**.
 |---|---|
 | Product (name, price, summary, image, stock, variant) | `src/content/products/<slug>.md` |
 | Plant-guide entry | `src/content/flora/<slug>.md` |
+| Article (מאמרים) | `src/content/articles/<slug>.md` — `draft: true` hides it from prod |
 | Workshop | `src/content/workshops/<slug>.md` |
 | Nav, footer links, contact details, categories, promo banner, shop config | `src/data/site.ts` |
 | Collection schemas | `src/content.config.ts` (**not** `src/content/config.ts`) |

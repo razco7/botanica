@@ -1,0 +1,68 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  article: CollectionEntry<'articles'>;
+  headingLevel?: 'h2' | 'h3';
+}
+const { article, headingLevel = 'h2' } = Astro.props;
+const { title, description, pubDate, image } = article.data;
+const href = `/articles/${article.id}/`;
+const Heading = headingLevel;
+const dateLabel = pubDate.toLocaleDateString('he-IL', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<article class="article-card">
+  {image && (
+    <a href={href} class="article-card__media" aria-hidden="true" tabindex="-1">
+      <img src={image} alt="" loading="lazy" width="800" height="500" />
+    </a>
+  )}
+  <div class="article-card__body">
+    <Heading class="article-card__title"><a href={href}>{title}</a></Heading>
+    <p class="article-card__excerpt">{description}</p>
+    <time class="article-card__date" datetime={pubDate.toISOString()}>{dateLabel}</time>
+  </div>
+</article>
+
+<style>
+  .article-card {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+  }
+  .article-card__media {
+    display: block;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    margin-bottom: 16px;
+    background: var(--bg-soft);
+    aspect-ratio: 16 / 10;
+  }
+  .article-card__media img { width: 100%; height: 100%; object-fit: cover; }
+
+  .article-card__title {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0 0 8px;
+  }
+  .article-card__title a { color: var(--ink); }
+  .article-card__title a:hover { color: var(--ink-hover); }
+  .article-card__excerpt {
+    margin: 0 0 10px;
+    font-size: 17px;
+    line-height: 28px;
+    color: var(--ink-soft);
+  }
+  .article-card__date { font-size: 14px; color: var(--ink-faint); }
+
+  @media (max-width: 767px) {
+    .article-card__title { font-size: 23px; }
+  }
+</style>
