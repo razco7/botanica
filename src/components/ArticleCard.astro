@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { author } from '../data/site';
 
 interface Props {
   article: CollectionEntry<'articles'>;
@@ -25,7 +26,11 @@ const dateLabel = pubDate.toLocaleDateString('he-IL', {
   <div class="article-card__body">
     <Heading class="article-card__title"><a href={href}>{title}</a></Heading>
     <p class="article-card__excerpt">{description}</p>
-    <time class="article-card__date" datetime={pubDate.toISOString()}>{dateLabel}</time>
+    <p class="article-card__meta">
+      מאת {author.name}
+      <span class="article-card__sep">·</span>
+      <time datetime={pubDate.toISOString()}>{dateLabel}</time>
+    </p>
   </div>
 </article>
 
@@ -60,7 +65,8 @@ const dateLabel = pubDate.toLocaleDateString('he-IL', {
     line-height: 28px;
     color: var(--ink-soft);
   }
-  .article-card__date { font-size: 14px; color: var(--ink-faint); }
+  .article-card__meta { margin: 0; font-size: 14px; color: var(--ink-faint); }
+  .article-card__sep { margin-inline: 5px; }
 
   @media (max-width: 767px) {
     .article-card__title { font-size: 23px; }
