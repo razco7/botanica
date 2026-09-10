@@ -12,7 +12,7 @@ Repo: `github.com/razco7/botanica` (public).
 ```bash
 npm install
 cp .env.example .env    # optional — Web3Forms + PayPal keys for the form/shop
-npm run dev             # http://localhost:4321 (or next free port)
+npm run dev -- --port 4333   # http://localhost:4333 (4321 is another project's)
 npm run build           # static output in dist/
 ```
 
@@ -25,14 +25,22 @@ Astro's `npm run dev` runs as a background daemon. Manage it with
 |---|---|
 | Products | `src/content/products/*.md` (one file per product) |
 | Flora index entries | `src/content/flora/*.md` |
+| Articles (מאמרים) | `src/content/articles/*.md` — `draft: true` = dev-only |
 | Workshops | `src/content/workshops/*.md` |
-| Nav, footer, contact details, promo banner, categories, keys | `src/data/site.ts` |
+| Nav, footer, contact details, author, promo banner, categories, keys | `src/data/site.ts` |
 | Clinic page copy | `src/pages/the-clinic.astro` (inline) |
 | Images | `public/images/` (plain files, stable URLs for PayPal line items) |
 | Old-URL redirects | `redirects` in `astro.config.mjs` (Astro emits a redirect page for each) |
 
 Product `id` (filename) = the URL slug, matching the original Webflow slugs so old links
 keep working. `src/content.config.ts` defines the schema for each collection.
+
+**Trailing slashes:** `trailingSlash: 'always'` — every internal link must end with `/`
+(GitHub Pages canonicalises to that form). An unslashed internal link is an SEO bug and
+404s in `astro dev`.
+
+There's also a privacy policy (`/privacy/`, `src/pages/privacy.astro`) and a dismissible
+cookie notice (`src/components/CookieNotice.astro`).
 
 ## Hosting — GitHub Pages
 
