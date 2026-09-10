@@ -31,7 +31,10 @@ pubDate: 2026-09-10
 
 ## מליסה (Melissa officinalis)
 
-![מליסה (Melissa officinalis) — עלים ופרחים](/images/articles/melissa.jpg)
+<!-- plant photo: alternate --start / --end down the article (קמומיל=start, מליסה=end, …). Save the file to public/images/articles/ -->
+<figure class="plant-figure plant-figure--end">
+  <img src="/images/articles/melissa.jpg" alt="מליסה (Melissa officinalis) — עלים ופרחים" width="900" height="1055" loading="lazy" />
+</figure>
 
 יש אנשים שאצלם החרדה מתבטאת בעיקר במחשבות. המחשבות רצות קדימה, מנתחות שוב ושוב את מה שקרה, חושבות על מה שיכול לקרות, וקשה מאוד "לכבות" את המוח.
 
