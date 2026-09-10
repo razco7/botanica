@@ -78,6 +78,10 @@ image: /images/articles/herbs-for-anxiety.jpg
 
 ## ולריאן (Valeriana officinalis)
 
+<figure class="plant-figure plant-figure--end">
+  <img src="/images/articles/valerian.jpg" alt="ולריאן (Valeriana officinalis) — צמח פורח עם שורש" width="900" height="1082" loading="lazy" />
+</figure>
+
 לפעמים החרדה מופיעה יחד עם קושי להירדם, אבל היא יכולה להופיע גם במהלך היום כתחושת אי-שקט, עוררות גבוהה או התקף חרדה מתקרב.
 
 ולריאן הוא צמח בעל פעילות מרגיעה ומרדימה משמעותית, ולכן הוא מוכר במיוחד לשימוש במצבים של מתח עצבי וקשיי שינה. עם זאת, ההשפעה המרגיעה שלו עשויה להתאים גם בזמן חרדה פעילה, כאשר הגוף נמצא בדריכות גבוהה ומתקשים להירגע.
