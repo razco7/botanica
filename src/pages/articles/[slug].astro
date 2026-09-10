@@ -114,6 +114,14 @@ const articleLd = {
   .article__body :global(ul) { padding-inline-start: 1.3em; }
   .article__body :global(li + li) { margin-top: 0.3em; }
   .article__body :global(a) { text-decoration: underline; text-underline-offset: 3px; }
+  /* inline plant photos — cutouts on white, kept modest and centred */
+  .article__body :global(p > img) {
+    display: block;
+    max-width: 420px;
+    width: 100%;
+    height: auto;
+    margin: 12px auto 8px;
+  }
 
   .article__cta {
     margin-top: 56px;
