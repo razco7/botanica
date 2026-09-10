@@ -58,6 +58,10 @@ image: /images/articles/herbs-for-anxiety.jpg
 
 ## לבנדר (Lavandula angustifolia)
 
+<figure class="plant-figure plant-figure--start">
+  <img src="/images/articles/lavender.jpg" alt="לבנדר (Lavandula angustifolia) — שיח פורח" width="900" height="959" loading="lazy" />
+</figure>
+
 [לבנדר](/flora/lavender/) הוא צמח מרפא עדין ונעים, שנעשה בו שימוש מסורתי לתמיכה במערכת העצבים ולהרגעת מתח.
 
 הוא יכול להתאים כאשר מרגישים שהגוף נמצא ב"מצב דריכות" שבו קשה לשחרר את המתח, במצב של עצבנות, חוסר שקט ועומס רגשי, והוא מתאים במיוחד לשעות הערב בתקופות שבהן המתח הנפשי מקשה על ההירדמות או על השינה הרגועה.
