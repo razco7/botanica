@@ -43,12 +43,13 @@ const dateLabel = pubDate.toLocaleDateString('he-IL', {
     border-top: 1px solid var(--line);
     padding-top: 24px;
   }
-  /* with an image: photo on the start side (right in RTL), text fills the rest */
+  /* with an image: photo on the start side (right in RTL), text fills the rest.
+     the photo stretches to the height of the text column. */
   .article-card--withimg {
     display: grid;
     grid-template-columns: 200px 1fr;
     gap: 24px;
-    align-items: start;
+    align-items: stretch;
   }
 
   .article-card__media {
@@ -57,9 +58,10 @@ const dateLabel = pubDate.toLocaleDateString('he-IL', {
     overflow: hidden;
     background: var(--bg-soft);
     border: 1px solid var(--line);
-    aspect-ratio: 3 / 2;
+    min-height: 150px;
   }
-  .article-card__media img { width: 100%; height: 100%; object-fit: cover; }
+  .article-card__media picture { display: block; height: 100%; }
+  .article-card__media img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
   .article-card__title {
     font-size: 28px;
@@ -80,6 +82,9 @@ const dateLabel = pubDate.toLocaleDateString('he-IL', {
 
   @media (max-width: 640px) {
     .article-card--withimg { grid-template-columns: 1fr; gap: 16px; }
+    /* stacked: show the whole composite, not a cropped strip */
+    .article-card__media { aspect-ratio: 3 / 2; min-height: 0; }
+    .article-card__media img { object-fit: contain; }
     .article-card__title { font-size: 23px; }
   }
 </style>
