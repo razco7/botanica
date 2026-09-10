@@ -10,6 +10,7 @@ const { article, headingLevel = 'h2' } = Astro.props;
 const { title, description, pubDate, image } = article.data;
 const href = `/articles/${article.id}/`;
 const Heading = headingLevel;
+const avif = image?.replace(/\.(jpe?g|png)$/i, '.avif');
 const dateLabel = pubDate.toLocaleDateString('he-IL', {
   year: 'numeric',
   month: 'long',
@@ -17,10 +18,13 @@ const dateLabel = pubDate.toLocaleDateString('he-IL', {
 });
 ---
 
-<article class="article-card">
+<article class:list={['article-card', { 'article-card--withimg': image }]}>
   {image && (
     <a href={href} class="article-card__media" aria-hidden="true" tabindex="-1">
-      <img src={image} alt="" loading="lazy" width="800" height="500" />
+      <picture>
+        {avif && <source srcset={avif} type="image/avif" />}
+        <img src={image} alt="" loading="lazy" width="1400" height="933" />
+      </picture>
     </a>
   )}
   <div class="article-card__body">
@@ -36,18 +40,24 @@ const dateLabel = pubDate.toLocaleDateString('he-IL', {
 
 <style>
   .article-card {
-    display: flex;
-    flex-direction: column;
     border-top: 1px solid var(--line);
     padding-top: 24px;
   }
+  /* with an image: photo on the start side (right in RTL), text fills the rest */
+  .article-card--withimg {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 26px;
+    align-items: start;
+  }
+
   .article-card__media {
     display: block;
     border-radius: var(--radius-card);
     overflow: hidden;
-    margin-bottom: 16px;
     background: var(--bg-soft);
-    aspect-ratio: 16 / 10;
+    border: 1px solid var(--line);
+    aspect-ratio: 3 / 2;
   }
   .article-card__media img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -68,7 +78,8 @@ const dateLabel = pubDate.toLocaleDateString('he-IL', {
   .article-card__meta { margin: 0; font-size: 14px; color: var(--ink-faint); }
   .article-card__sep { margin-inline: 5px; }
 
-  @media (max-width: 767px) {
+  @media (max-width: 640px) {
+    .article-card--withimg { grid-template-columns: 1fr; gap: 16px; }
     .article-card__title { font-size: 23px; }
   }
 </style>

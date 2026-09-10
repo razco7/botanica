@@ -63,7 +63,10 @@ const articleLd = {
     </header>
 
     {d.image && (
-      <img class="article__lead" src={d.image} alt="" width="1120" height="620" />
+      <picture>
+        <source srcset={d.image.replace(/\.(jpe?g|png)$/i, '.avif')} type="image/avif" />
+        <img class="article__lead" src={d.image} alt="" width="1400" height="933" />
+      </picture>
     )}
 
     <div class="prose article__body">
@@ -101,7 +104,9 @@ const articleLd = {
   .article__lead {
     display: block;
     width: 100%;
+    height: auto;
     border-radius: var(--radius-card);
+    border: 1px solid var(--line);
     margin-bottom: 36px;
   }
 
