@@ -120,6 +120,8 @@ const articleLd = {
   .article__body :global(ul) { padding-inline-start: 1.3em; }
   .article__body :global(li + li) { margin-top: 0.3em; }
   .article__body :global(a) { text-decoration: underline; text-underline-offset: 3px; }
+  /* bold "labels" (מתאים במיוחד ל: / איפה משיגים?) — extra breathing room above */
+  .article__body :global(p:has(> strong:first-child)) { margin-top: 40px; }
 
   /* plant photos — cutouts on white. On wide screens they float beside the
      prose, alternating side per plant (--start / --end in the markdown);
